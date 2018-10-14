@@ -324,13 +324,14 @@ ul.blockList, ul.blockListLast {
 }
 ul.blockList li.blockList, ul.blockListLast li.blockList {
     list-style:none;
-    margin-bottom:5px;
+    margin-left:15px;
+    margin-bottom:15px;
     line-height:1.4;
 }
 ul.blockList ul.blockList li.blockList, ul.blockList ul.blockListLast li.blockList {
     padding:0px 20px 5px 10px;
     border:1px solid #ededed; 
-    background-color:#d9edf730;
+    background-color:#f8f8f8;
 }
 ul.blockList ul.blockList ul.blockList li.blockList, ul.blockList ul.blockList ul.blockListLast li.blockList {
     padding:0 0 5px 8px;
