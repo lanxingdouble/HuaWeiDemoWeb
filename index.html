@@ -5,15 +5,7 @@
 </head>
 <body>
 
-<!--<script id="class_releated_concept_script" type="text/x-jquery-tmpl">-->
-   <!--<dd><a target="_blank" href="${url}" >${name}</a></dd>-->
-
-<!--</script>-->
-<!--<script id="class_see_also_script" type="text/x-jquery-tmpl">-->
-   <!--<dd><a onclick="get_class_kg_id_by_kg_id(${kg_id})" target="_blank" title=${api_name}>${simple_api_name}</a></dd>-->
-
-<!--</script>-->
-
+<!--场景一method_search模板-->
 <script id="method_search_script" type="text/x-jquery-tmpl">
      <ul class="blockList">
        <li class="blockList" >
@@ -41,6 +33,7 @@
         </li>
     </ul>
 </script>
+<!--场景二issue_search模板-->
 <script id="issue_search_script" type="text/x-jquery-tmpl">
         <ul class="blockList">
             <li class="blockList">
@@ -74,6 +67,7 @@
             </li>
          </ul>
 </script>
+<!--场景三developer_search模板-->
 <script id="developer_search_script" type="text/x-jquery-tmpl">
     <ul class="blockList">
             <li class="blockList">
@@ -173,15 +167,15 @@
             <!--</ul>-->
         <!--</li>-->
     <!--</ul>-->
-
 <!--</script>-->
 
+<!--搜索框-->
 <div class="main-title">
     <div class="text-center">HuaWeiDemo</div>
     <div class="input-jump center-block">
         <div class="col-lg">
             <div class="input-group">
-                <span class="input-group-btn">
+                <span class="input-group-btn"><!-- /场景选择下拉菜单、搜索框和搜索button-->
                     <select class="btn btn-primary" id="search_type">
                     <option value="1" selected>Method</option>
                     <option value="2">Issue</option>
@@ -194,12 +188,12 @@
                         <button class="btn btn-primary" type="button" id="bt1" onclick="jumpClick()">SEARCH
                         </button>
                 </span>
-
             </div><!-- /input-group -->
         </div><!-- /.col-lg-6 -->
     </div>
 </div>
 
+<!--搜索结果展示，左边文本40%，右边KG60%-->
 <div class="showGroup" style="display: none">
     <!--<div id="labelProperty">-->
         <!--<div id="labelList">-->
@@ -207,7 +201,6 @@
     <!--</div>-->
     <div id="searchresult" >
     </div>
-
     <div id="Graph">
         <div id="GraphContainer">
         </div>

@@ -5,12 +5,6 @@ let startData = {
 };
 let labelProperty=[];
 let all_labels_color=["Software Concept", "Descriptive Knowledge", "API Concept", "API Package", "API Class", "API Interface", "API Field", "API Method", "API Parameter", "API Return Value","Exception"];
-var class_releated_concept = [];
-var class_kg_id = 0;
-
-var class_mode = 1;
-var method_mode = 2;
-
 var labelList=[];
 var labelStatusList=[];
 var relationStatusList=[];
@@ -18,7 +12,6 @@ var nodesAndRelations=[];
 var relationList=[];
 var labels_set = [];
 var color_index = 0;
-var method_sentence_flag=0;
 
 neo4jd3 = new Neo4jD3('#GraphContainer', {
     D3Data: startData,
@@ -26,17 +19,12 @@ neo4jd3 = new Neo4jD3('#GraphContainer', {
     infoPanel: true,
     onNodeDoubleClick: onNodeDoubleClick,
     icons: {
-//                        'Address': 'home',
         'Api': 'gear',
-//                        'BirthDate': 'birthday-cake',
         'Cookie': 'paw',
-//                        'CreditCard': 'credit-card',
-//                        'Device': 'laptop',
         'Email': 'at',
         'Git': 'git',
         'Github': 'github',
         'Google': 'google',
-//                        'icons': 'font-awesome',
         'Ip': 'map-marker',
         'Issues': 'exclamation-circle',
         'Language': 'language',
@@ -52,7 +40,6 @@ neo4jd3 = new Neo4jD3('#GraphContainer', {
     },
     images: {
         'wikidata': 'img/twemoji/1f3e0.svg',
-//                        'Api': 'img/twemoji/1f527.svg',
         'entity': 'img/twemoji/1f382.svg',
         'Cookie': 'img/twemoji/1f36a.svg',
         'CreditCard': 'img/twemoji/1f4b3.svg',
@@ -66,18 +53,13 @@ neo4jd3 = new Neo4jD3('#GraphContainer', {
         'Language': 'img/twemoji/1f1f1-1f1f7.svg',
         'Options': 'img/twemoji/2699.svg',
         'Password': 'img/twemoji/1f511.svg',
-//                        'Phone': 'img/twemoji/1f4de.svg',
         'Project': 'img/twemoji/2198.svg',
         'Project|name|neo4jd3': 'img/twemoji/2196.svg',
-//                        'SecurityChallengeAnswer': 'img/twemoji/1f4ac.svg',
         'User': 'img/twemoji/1f600.svg'
-//                        'zoomFit': 'img/twemoji/2194.svg',
-//                        'zoomIn': 'img/twemoji/1f50d.svg',
-//                        'zoomOut': 'img/twemoji/1f50e.svg'
     },
 });
 
-
+#获取当前节点的label,加至label_list
 function getLabelSet(labels) {
     if (labels) {
         for (let i = 0; i < labels.length; i++) {
@@ -99,7 +81,7 @@ function getLabelSet(labels) {
 
 }
 
-//获取扩展节点
+//获取节点
 function get_expand_nodes(kg_id) {
     $.ajax({
         async: true,
@@ -173,7 +155,7 @@ function get_expand_nodes(kg_id) {
         }
     });
 }
-
+//双击扩展节点
 function onNodeDoubleClick(d) {
     let nodeID = d.id;
     let dx = d.x;
@@ -305,36 +287,6 @@ function jumpClick() {
                 },
                 success: function (d) {
                     if (d.length > 0) {
-                        // br = "";
-                        // for (var i = 0; i < d.length; i++) {
-                        //     l = "<ur>" + br + d[i].project_name + "</ur><br/>";
-                        //     br = br + "&nbsp&nbsp&nbsp&nbsp&nbsp";
-                        //     $("#searchresult").append(l);
-                        //     l = "<ur>" + br + d[i].package_name + "</ur><br/>";
-                        //     br = br + "&nbsp&nbsp&nbsp&nbsp&nbsp";
-                        //     $("#searchresult").append(l);
-                        //     l = "<ur>" + br + d[i].method_name + "</ur><br/>";
-                        //     br = br + "&nbsp&nbsp&nbsp&nbsp&nbsp";
-                        //     $("#searchresult").append(l);
-                        //     if (d[i].concepts.length>0) {
-                        //         l = "<ul class=\"blockList\"><li class=\"blockList\"><dl>";
-                        //         l=l+"<dt><span class=\"seeLabel\">concepts:</span>";
-                        //         for (var j = 0; j < d[i].concepts.length; j++) {
-                        //             l=l+"<dd><a href="+d[i].concepts.url+" target=\"_blank\">"+d[i].concepts.name+"</a></dd>";
-                        //         }
-                        //         l=l+"</dt></dl></li></ul>";
-                        //         $("#searchresult").append(l);
-                        //     }
-                        //     if (d[i].clone_method.length>0) {
-                        //         l = "<ul class=\"blockList\"><li class=\"blockList\"><dl>";
-                        //         l=l+"<dt><span class=\"seeLabel\">clone_method:</span>";
-                        //         for (var j = 0; j < d[i].concepts.length; j++) {
-                        //             l=l+"<dd>"+d[i].clone_method.method_name+"</dd>";
-                        //         }
-                        //         l=l+"</dt></dl></li></ul>";
-                        //         $("#searchresult").append(l);
-                        //     }
-                        //}
                         $(".showGroup").show();
                         $("#searchresult").show();
                         $("#Graph").show();
@@ -390,9 +342,7 @@ function jumpClick() {
                     }
                 }
             });
-
         }
-
     } else {
         $("#searchresult").html("");
         $(".showGroup").css('display', 'none');
