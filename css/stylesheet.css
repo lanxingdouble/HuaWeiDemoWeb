@@ -325,6 +325,7 @@ ul.blockList, ul.blockListLast {
 ul.blockList li.blockList, ul.blockListLast li.blockList {
     list-style:none;
     margin-left:15px;
+    margin-right:15px;
     margin-bottom:15px;
     line-height:1.4;
 }

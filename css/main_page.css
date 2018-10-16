@@ -103,11 +103,21 @@ body{
     width: 40%;
     height: inherit;
     float: left;
-    margin: 0 0 0 0;
+    margin: 40 0 0 0;
+    border: #6da4e814;
+    /*当文字超出容器，自动换行*/
+    display:block;word-break: break-all;word-wrap: break-word;
+}
+
+#searchresult ul.blockList ul.blockList li.blockList{
+    background-color: #ffffff;
 }
 #Graph{
     width: 60%;
     height: inherit;
     float: right;
     margin: 0 0 0 0;
+}
+#search_type{
+    width: 133px;
 }

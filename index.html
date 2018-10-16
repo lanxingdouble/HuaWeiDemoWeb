@@ -9,6 +9,8 @@
 <script id="method_search_script" type="text/x-jquery-tmpl">
      <ul class="blockList">
        <li class="blockList" >
+        <ul class="blockList">
+         <li class="blockList" >
            <ur>${project_name}</ur><br/>
            <ur>&nbsp&nbsp&nbsp&nbsp&nbsp${package_name}</ur><br/>
            <ur>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp${method_name}</ur><br/>
@@ -17,42 +19,60 @@
                  <dt><span class="seeLabel">concepts:</span>
                  <dd>
                  {{each(j,group) concepts}}
-                    <a href="${group.url}" target="_blank">${group.name}</a>
+                 <dd>${group.name}</dd>
                  {{/each}}
                  </dd>
               {{else}}
               {{/if}}
-              {{if clone_method.length >= 1}}
-                 <dt><span class="seeLabel">clone method:</span>
-                 {{each(j,group) clone_method}}
+              {{if clone_methods.length >= 1}}
+                 <dt><span class="seeLabel">clone methods:</span>
+                 {{each(j,group) clone_methods}}
                     <dd>${group.method_name}</dd>
                  {{/each}}
               {{else}}
               {{/if}}
            </dl>
-        </li>
+         </li>
+        </ul>
+      </li>
     </ul>
+
 </script>
 <!--场景二issue_search模板-->
 <script id="issue_search_script" type="text/x-jquery-tmpl">
         <ul class="blockList">
             <li class="blockList">
-                <div class="block">${issue_tittle}</div>
-                <div class="block">${issue_body}</div>
+                <ul class="blockList">
+                <li class="blockList">
+                <dt><span class="seeLabel">${issue_tittle}</span></dt>
+                {{if reporter.length >= 1}}
+                    <dt><span class="seeLabel">reporter:</span>
+                    {{each(j,group) reporter}}
+                       ${group.reporter_name}
+                    {{/each}}
+                    </dt>
+                {{else}}
+                {{/if}}
+                {{if solver.length >= 1}}
+                     <dt><span class="seeLabel">solver:</span>
+                    {{each(j,group) solver}}
+                       <dd>${group.solver_name}</dd>
+                    {{/each}}
+                {{else}}
+                {{/if}}
+                <dd>${issue_body}</dd>
                 <dl>
                 {{if concepts.length >= 1}}
                     <dt><span class="seeLabel">concepts:</span>
-                    <dd>
                     {{each(j,group) concepts}}
-                       <a href="${group.url}" target="_blank">${group.name}</a>
+                       <dd>${group.commit_name}</dd>
                     {{/each}}
-                    </dd>
                 {{else}}
                 {{/if}}
-                {{if related_commit.length >= 1}}
-                    <dt><span class="seeLabel">related commit:</span>
-                    {{each(j,group) related_commit}}
-                    <dd>${group.developer}:${group.commit_name}</dd>
+                {{if related_project.length >= 1}}
+                    <dt><span class="seeLabel">related project:</span>
+                    {{each(j,group) related_project}}
+                    <dd>${group.project_name}</dd>
                     {{/each}}
                 {{else}}
                 {{/if}}
@@ -66,22 +86,18 @@
                 </dl>
             </li>
          </ul>
+        </li>
+      </ul>
+
 </script>
 <!--场景三developer_search模板-->
 <script id="developer_search_script" type="text/x-jquery-tmpl">
     <ul class="blockList">
             <li class="blockList">
+            <ul class="blockList">
+            <li class="blockList">
                 <div class="block">${developer_name}</div>
                 <dl>
-                {{if professional.length >= 1}}
-                    <dt><span class="seeLabel">professional:</span>
-                    <dd>
-                    {{each(j,group) professional}}
-                       <a href="${group.url}" target="_blank">${group.name}</a>
-                    {{/each}}
-                    </dd>
-                {{else}}
-                {{/if}}
                 {{if projects.length >= 1}}
                     <dt><span class="seeLabel">projects:</span>
                     {{each(j,group) projects}}
@@ -99,74 +115,82 @@
                 </dl>
             </li>
          </ul>
+         </li>
+         </ul>
 </script>
 
+<script type="text/x-jquery-tmpl" id="labelTemplate">
+        <label>
+            <input type="checkbox" value="${name}" id="label-${name}" onclick="labelCheckClick('${name}')" checked="checked">
+            <label><span class='label' style='background-color:${color}'>${name}</span></label>
+        </label>
+</script>
 <!--<script id="method_detail_script" type="text/x-jquery-tmpl">-->
-    <!--<ul class="blockList">-->
-       <!--<li class="blockList" >-->
-       <!--<h2>${method_name}</h2>-->
-        <!--<ul class="blockList">-->
-            <!--<li class="blockList">-->
-                <!--<pre>${declaration}</pre>-->
-                <!--<div class="block">${class_define}</div>-->
-                <!--<dl>-->
-                    <!--{{if method_descriptions_list.length >= 1}}-->
-                       <!--{{each(j,group) method_descriptions_list}}-->
-                         <!--{{if group.method_description_from_comment}}-->
-                            <!--<dd>${group.method_description_from_comment}</dd>-->
-                         <!--{{else}}-->
-                            <!--{{if group.short_description}}-->
-                            <!--<dd>${group.short_description}</dd>-->
-                            <!--{{else}}-->
-                               <!--{{if group.poi_human_description}}-->
-                               <!--<dd>${group.poi_human_description}</dd>-->
-                               <!--{{else}}-->
-                                  <!--{{if group.poi_rule_description}}-->
-                                  <!--<dd>${group.poi_rule_description}</dd>-->
-                                  <!--{{else}}-->
-                                     <!--{{if group.poi_deep_learning_description}}-->
-                                     <!--<dd>${group.poi_deep_learning_description}</dd>-->
-                                     <!--{{else}}-->
-                                     <!--{{/if}}-->
-                                  <!--{{/if}}-->
-                               <!--{{/if}}-->
-                            <!--{{/if}}-->
-                         <!--{{/if}}-->
-                       <!--{{/each}}-->
-                    <!--{{else}}-->
-                    <!--{{/if}}-->
-                    <!--<dt><span class="returnLabel">Returns:</span></dt>-->
-                    <!--<dd>${return_type}</dd>-->
-                    <!--{{if related_concept.length >= 1}}-->
-                       <!--<dt><span class="seeLabel">Releated Concept:</span></dt>-->
-                       <!--{{each(j,group) related_concept}}-->
-                         <!--<dd><a href="${group.url}" target="_blank" >${group.name}</a></dd>-->
-                       <!--{{/each}}-->
-                    <!--{{else}}-->
-                    <!--{{/if}}-->
-                    <!--<dt><span class="seeLabel">See Also:</span></dt>-->
-                    <!--{{if see_also.length >= 1}}-->
-                       <!--{{each(j,group) see_also}}-->
-                         <!--<dd><a onclick="get_class_kg_id_by_kg_id(${group.kg_id})" target="_blank" title=${group.api_name}>${group.simple_api_name}</a></dd>-->
-                       <!--{{/each}}-->
-                    <!--{{else}}-->
-                        <!--<dd>null</dd>-->
-                    <!--{{/if}}-->
-                <!--</dl>-->
-                <!--<div class="click_show_detail" id=${method_kg_id}  onclick="click_for_more_details(this,this.children,${method_kg_id})">Click For More Details-->
-                <!--<div class="show_detail" id="method_functional${method_kg_id}" style="display:none text-decoration:none">-->
-                <!--</div>-->
-                <!--<div class="show_detail" id="methoddirective${method_kg_id}" style="display:none text-decoration:none">-->
-                <!--</div>-->
-                <!--<div class="show_detail" id="method_post${method_kg_id}" style="display:none text-decoration:none">-->
-                <!--</div>-->
-                <!--<div class="show_detail" id="method_sample_code${method_kg_id}" style="display:none text-decoration:none">-->
-                <!--</div>-->
-                <!--</div>-->
-            <!--</li>-->
-            <!--</ul>-->
-        <!--</li>-->
-    <!--</ul>-->
+<!--<ul class="blockList">-->
+<!--<li class="blockList" >-->
+<!--<h2>${method_name}</h2>-->
+<!--<ul class="blockList">-->
+<!--<li class="blockList">-->
+<!--<pre>${declaration}</pre>-->
+<!--<div class="block">${class_define}</div>-->
+<!--<dl>-->
+<!--{{if method_descriptions_list.length >= 1}}-->
+<!--{{each(j,group) method_descriptions_list}}-->
+<!--{{if group.method_description_from_comment}}-->
+<!--<dd>${group.method_description_from_comment}</dd>-->
+<!--{{else}}-->
+<!--{{if group.short_description}}-->
+<!--<dd>${group.short_description}</dd>-->
+<!--{{else}}-->
+<!--{{if group.poi_human_description}}-->
+<!--<dd>${group.poi_human_description}</dd>-->
+<!--{{else}}-->
+<!--{{if group.poi_rule_description}}-->
+<!--<dd>${group.poi_rule_description}</dd>-->
+<!--{{else}}-->
+<!--{{if group.poi_deep_learning_description}}-->
+<!--<dd>${group.poi_deep_learning_description}</dd>-->
+<!--{{else}}-->
+<!--{{/if}}-->
+<!--{{/if}}-->
+<!--{{/if}}-->
+<!--{{/if}}-->
+<!--{{/if}}-->
+<!--{{/each}}-->
+<!--{{else}}-->
+<!--{{/if}}-->
+<!--<dt><span class="returnLabel">Returns:</span></dt>-->
+<!--<dd>${return_type}</dd>-->
+<!--{{if related_concept.length >= 1}}-->
+<!--<dt><span class="seeLabel">Releated Concept:</span></dt>-->
+<!--{{each(j,group) related_concept}}-->
+<!--<dd><a href="${group.url}" target="_blank" >${group.name}</a></dd>-->
+<!--{{/each}}-->
+<!--{{else}}-->
+<!--{{/if}}-->
+<!--<dt><span class="seeLabel">See Also:</span></dt>-->
+<!--{{if see_also.length >= 1}}-->
+<!--{{each(j,group) see_also}}-->
+<!--<dd><a onclick="get_class_kg_id_by_kg_id(${group.kg_id})" target="_blank" title=${group.api_name}>${group.simple_api_name}</a></dd>-->
+<!--{{/each}}-->
+<!--{{else}}-->
+<!--<dd>null</dd>-->
+<!--{{/if}}-->
+<!--</dl>-->
+<!--<div class="click_show_detail" id=${method_kg_id}  onclick="click_for_more_details(this,this.children,${method_kg_id})">Click For More Details-->
+<!--<div class="show_detail" id="method_functional${method_kg_id}" style="display:none text-decoration:none">-->
+<!--</div>-->
+<!--<div class="show_detail" id="methoddirective${method_kg_id}" style="display:none text-decoration:none">-->
+<!--</div>-->
+<!--<div class="show_detail" id="method_post${method_kg_id}" style="display:none text-decoration:none">-->
+<!--</div>-->
+<!--<div class="show_detail" id="method_sample_code${method_kg_id}" style="display:none text-decoration:none">-->
+<!--</div>-->
+<!--</div>-->
+<!--</li>-->
+<!--</ul>-->
+<!--</li>-->
+<!--</ul>-->
 <!--</script>-->
 
 <!--搜索框-->
@@ -176,14 +200,14 @@
         <div class="col-lg">
             <div class="input-group">
                 <span class="input-group-btn"><!-- /场景选择下拉菜单、搜索框和搜索button-->
-                    <select class="btn btn-primary" id="search_type">
-                    <option value="1" selected>Method</option>
+                    <select class="form-control btn btn-primary" id="search_type">
+                    <option value="1" selected>API Concept</option>
                     <option value="2">Issue</option>
                     <option value="3">Developer</option>
                     </select>
                 </span>
                 <input type="text" autocomplete="on" class="form-control" onkeydown="keyup_submit(event)"
-                       placeholder="enter fully qualified class name...">
+                       placeholder="choose the right type on the left side ">
                 <span class="input-group-btn">
                         <button class="btn btn-primary" type="button" id="bt1" onclick="jumpClick()">SEARCH
                         </button>
@@ -195,13 +219,13 @@
 
 <!--搜索结果展示，左边文本40%，右边KG60%-->
 <div class="showGroup" style="display: none">
-    <!--<div id="labelProperty">-->
-        <!--<div id="labelList">-->
-        <!--</div>-->
-    <!--</div>-->
-    <div id="searchresult" >
+    <div id="searchresult">
     </div>
     <div id="Graph">
+        <div id="labelProperty">
+            <div id="labelList">
+            </div>
+        </div>
         <div id="GraphContainer">
         </div>
     </div>

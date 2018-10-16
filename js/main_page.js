@@ -59,7 +59,7 @@ neo4jd3 = new Neo4jD3('#GraphContainer', {
     },
 });
 
-#获取当前节点的label,加至label_list
+//获取当前节点的label,加至label_list
 function getLabelSet(labels) {
     if (labels) {
         for (let i = 0; i < labels.length; i++) {
@@ -120,9 +120,9 @@ function get_expand_nodes(kg_id) {
             //console.log("labelProperty:", labelProperty);
             neo4jd3.cleanGraph();
             $.each(d.nodes, function (i, val) {
-                if(d.nodes[i]["labels"][0]=="API Method") {
-                    d.nodes[i]["name"] = get_simple_name(d.nodes[i]["name"]);
-                }
+                // if(d.nodes[i]["labels"][0]=="API Method") {
+                //     d.nodes[i]["name"] = get_simple_name(d.nodes[i]["name"]);
+                // }
                 d.nodes[i]["x"] = $("#GraphContainer").width() / 2;
                 d.nodes[i]["y"] = $("#GraphContainer").height() / 2;
                 getLabelSet(val.labels);
@@ -182,7 +182,7 @@ function onNodeDoubleClick(d) {
                 if(labels_set.has(d.nodes[i]["labels"][0])==false) {
                     labels_set.add(d.nodes[i]["labels"][0]);
                     var color_label = {};
-                    color_index=all_labels_color.indexOf(value);
+                    color_index=all_labels_color.indexOf(d.nodes[i]["labels"][0]);
                     color_label["color"] = generateRandomColor(color_index);
                     color_label["name"] = d.nodes[i]["labels"][0];
                     //console.log("color_label", color_label);
@@ -192,9 +192,9 @@ function onNodeDoubleClick(d) {
             });
             //console.log("labelProperty:", labelProperty);
             $.each(d.nodes, function (i, val) {
-                if(d.nodes[i]["labels"][0]=="API Method") {
-                    d.nodes[i]["name"] = get_simple_name(d.nodes[i]["name"]);
-                }
+                // if(d.nodes[i]["labels"][0]=="API Method") {
+                //     d.nodes[i]["name"] = get_simple_name(d.nodes[i]["name"]);
+                // }
                 d.nodes[i]["x"] = dx;
                 d.nodes[i]["y"] =dy;
                 getLabelSet(val.labels);
@@ -265,6 +265,14 @@ function onNodeDoubleClick(d) {
 
 //搜索按钮事件
 function jumpClick() {
+    labelProperty=[];
+    labelList=[];
+    labelStatusList=[];
+    relationStatusList=[];
+    nodesAndRelations=[];
+    relationList=[];
+    labels_set = [];
+    $("#labelList").html("");
     $("#searchresult").html("");
     $(".showGroup").css('display', 'none');
     $("#searchresult").css('display', 'none');
@@ -284,9 +292,12 @@ function jumpClick() {
                     console.log("Error " + errorThrown);
                     console.log("Status: " + status);
                     console.log(xhr);
+                    alert("can't find result");
                 },
                 success: function (d) {
                     if (d.length > 0) {
+                        get_expand_nodes(d[0].kg_id);
+                        console.log("api concept:"+d);
                         $(".showGroup").show();
                         $("#searchresult").show();
                         $("#Graph").show();
@@ -302,7 +313,7 @@ function jumpClick() {
                 url: "http://bigcode.fudan.edu.cn/dysd3/IssueQuery/",
                 type: "post",
                 contentType: "application/json; charset=utf-8",
-                data: JSON.stringify({"query": textvalue}),
+                data: JSON.stringify({"query": "PullRefreshLayout not available"}),
                 error: function (xhr, status, errorThrown) {
                     console.log("Error " + errorThrown);
                     console.log("Status: " + status);
@@ -310,6 +321,8 @@ function jumpClick() {
                 },
                 success: function (d) {
                     if (d.length > 0) {
+                        get_expand_nodes(d[0].kg_id);
+                        console.log("issue:"+d);
                         $(".showGroup").show();
                         $("#searchresult").show();
                         $("#Graph").show();
@@ -319,6 +332,7 @@ function jumpClick() {
                     }
                 }
             });
+
         }else{
             $.ajax({
                 async: true,
@@ -333,6 +347,8 @@ function jumpClick() {
                 },
                 success: function (d) {
                     if (d.length > 0) {
+                        get_expand_nodes(d[0].kg_id);
+                        console.log("developer:"+d);
                         $(".showGroup").show();
                         $("#searchresult").show();
                         $("#Graph").show();
