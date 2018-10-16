@@ -100,24 +100,30 @@ body{
 }
 
 #searchresult{
-    width: 40%;
-    height: inherit;
-    float: left;
+    /*width: 40%;*/
+    /*height: inherit;*/
+    /*float: left;*/
     margin: 40 0 0 0;
     border: #6da4e814;
     /*当文字超出容器，自动换行*/
     display:block;word-break: break-all;word-wrap: break-word;
 }
 
+/*搜索结果的背景色*/
 #searchresult ul.blockList ul.blockList li.blockList{
     background-color: #ffffff;
 }
+
+/*设置图的左右边距*/
 #Graph{
-    width: 60%;
-    height: inherit;
-    float: right;
-    margin: 0 0 0 0;
+    /*width: 60%;*/
+    /*height: inherit;*/
+    /*float: right;*/
+    margin-left: 30px;
+    margin-riht: 30px;
 }
+
+/*选择下拉框的宽度*/
 #search_type{
     width: 133px;
 }

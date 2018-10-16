@@ -313,7 +313,7 @@ function jumpClick() {
                 url: "http://bigcode.fudan.edu.cn/dysd3/IssueQuery/",
                 type: "post",
                 contentType: "application/json; charset=utf-8",
-                data: JSON.stringify({"query": "PullRefreshLayout not available"}),
+                data: JSON.stringify({"query": textvalue}),
                 error: function (xhr, status, errorThrown) {
                     console.log("Error " + errorThrown);
                     console.log("Status: " + status);

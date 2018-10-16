@@ -9,11 +9,12 @@ svg {
     font-size: 20px;
 }
 
+/*KG的大小*/
 .neo4jd3-graph {
     border: 1px solid #ddd;
     border-radius: 5px;
-    height:500px;
-    width: 95%;
+    height:400px;
+    width: 100%;
 }
 
 .neo4jd3-info {
