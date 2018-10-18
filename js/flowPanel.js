@@ -17,10 +17,9 @@ $("circle").click(function () {
     var nodename = $(this).attr("name");
     var nodeID = $(this).attr("id");
     var paneltext;
-
     $.ajax({
         async: false,
-        url: "http://bigcode.fudan.edu.cn/kg/getNodeByID/",
+        url: "http://bigcode.fudan.edu.cn/dysd3/getNodeByID/",
         type: "post",
         data: '{"id":' + nodeID + '}',
         contentType: "application/json; charset=utf-8",
@@ -65,7 +64,7 @@ function openClick() {
     $("#nodesOpen").click(function () {
         $.ajax({
             async: false,
-            url: "http://bigcode.fudan.edu.cn/kg/expandNode/",
+            url: "http://bigcode.fudan.edu.cn/dysd3/expandNode/",
             type: "post",
             data: passid,
             contentType: "application/json; charset=utf-8",
@@ -149,7 +148,7 @@ function openClick() {
 
                     $.ajax({
                         async: false,
-                        url: "http://bigcode.fudan.edu.cn/kg/getNodeByID/",
+                        url: "http://bigcode.fudan.edu.cn/dysd3/getNodeByID/",
                         type: "post",
                         data: '{"id":' + nodeID + '}',
                         contentType: "application/json; charset=utf-8",

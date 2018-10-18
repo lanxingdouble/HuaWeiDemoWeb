@@ -673,10 +673,6 @@ function Neo4jD3(_selector, _options) {
 
             outline.attr('d', function (d) {
 
-
-
-
-
                 let     center = {x: 0, y: 0},
                     angle = rotation(d.source, d.target),
                     textBoundingBox = text.node().getBBox(),

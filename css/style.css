@@ -128,3 +128,133 @@ h1 a {
 }
 
 /*http://www.jq22.com*/
+
+/*.selectBox{*/
+	/*width:500px;*/
+	/*height: 40px;*/
+	/*line-height: 36px;*/
+	/*background: #f8f8f8;*/
+	/*border: 1px solid #ccc;*/
+	/*margin: 0px;*/
+/*}*/
+/*.inputCase{*/
+	/*position: relative;*/
+	/*width: 500px;*/
+	/*height: 100%;*/
+	/*box-sizing: border-box;*/
+/*}*/
+/*.inputCase input.imitationSelect{*/
+	/*width: 100%;*/
+	/*height: 100%;*/
+	/*box-sizing: border-box;*/
+	/*border: 1px solid #ccc;*/
+	/*display: block;*/
+	/*text-indent: 20px;*/
+	/*cursor: default;*/
+/*}*/
+/*.inputCase i.fa{*/
+	/*position: absolute;*/
+	/*right: 10px;*/
+	/*top: 10px;*/
+	/*color: #007AFF;*/
+/*}*/
+/*.fa{*/
+	/*cursor: pointer;*/
+/*}*/
+/*.selectUl{*/
+	/*display: none;*/
+	/*padding: 0;*/
+	/*margin: 0;*/
+	/*border-left: 1px solid #cccccc;*/
+	/*border-right: 1px solid #cccccc;*/
+	/*border-bottom: 1px solid #cccccc;*/
+	/*!*border-bottom: 1px solid #ccc;*!*/
+	/*!*border-left: 1px solid #ccc;*!*/
+	/*!*border-right: 1px solid #ccc;*!*/
+	/*width: 100%;*/
+	/*margin-left: -1px;*/
+/*}*/
+/*.selectUl li{*/
+	/*margin-top: 0px;*/
+	/*height: 38px;*/
+	/*line-height: 36px;*/
+	/*list-style: none;*/
+	/*text-indent: 20px;*/
+	/*border-bottom: 1px solid #ccc;*/
+	/*!*border-left: 1px solid #ccc;*/
+	/*border-right: 1px solid #ccc;*!*/
+/*}*/
+/*.selectUl li:last-child{*/
+	/*border-bottom: 0 none;*/
+/*}*/
+/*.selectUl li:hover{*/
+	/*background: #ddd;*/
+/*}*/
+/*.selectUl li:last-child{*/
+	/*border-bottom: 0 none;*/
+/*}*/
+/*.person_root {*/
+	/*width: auto;*/
+	/*margin-top: 0px;*/
+	/*margin-left: 5px;*/
+	/*border: 1px solid #0095e7;*/
+	/*color: #0095e7;*/
+	/*border-radius: 3px;*/
+	/*display: block;*/
+	/*float: left;*/
+/*}*/
+/*.person_root span:nth-child(1) {*/
+	/*line-height: 26px;*/
+	/*display: block;*/
+	/*float: left;*/
+	/*width: auto;*/
+	/*height: 23px;*/
+	/*float: left;*/
+	/*margin-left: 0px;*/
+	/*margin-right: 0px;*/
+	/*border: 0 none;*/
+	/*padding-right: 5px;*/
+	/*color: #0095e7;*/
+/*}*/
+/*.person_root i {*/
+	/*width: 20px;*/
+	/*height: 20px;*/
+	/*display: block;*/
+	/*padding: 0;*/
+	/*margin: 3px 8px 0px 0px;*/
+	/*float: left;*/
+	/*line-height: 20px;*/
+	/*text-align: center;*/
+	/*font-style: normal;*/
+	/*text-indent: 0px;*/
+	/*cursor: pointer;*/
+/*}*/
+/*#role_select{*/
+	/*font-size: 12px;*/
+	/*height: 100%;*/
+/*}*/
+/*.select-menu-div i {*/
+	/*color: #0095e7;*/
+	/*cursor: pointer;*/
+/*}*/
+/*.actived_li{*/
+	/*color: #0095e7;*/
+/*}*/
+
+/*.clear{*/
+	/*clear: both;*/
+	/*float: none;*/
+/*}*/
+/**{margin:0;padding:0;list-style:none;}*/
+/*.jq22-search-form{width:575px;margin:100px auto;overflow: hidden;}*/
+/*.jq22-search-form .search-bd{height: 25px;}*/
+/*.jq22-search-form .search-bd li{font-size:12px;width:80px;height: 25px;line-height: 25px;text-align:center;float: left;cursor: pointer;background-color: #eee;color: #666; margin-right: 3px}*/
+/*.jq22-search-form .search-bd li.selected{color: #fff;font-weight: 700;background-color: #B61D1D;}*/
+/*.jq22-search-form .search-hd{height:340px;background-color: #ffffff;padding: 3px;position: relative;}*/
+/*!*.jq22-search-form .search-hd .search-input{width: 490px;height: 22px;line-height: 22px;padding: 6px 0;background: none;text-indent: 10px;border: 0;outline: none;position: relative;left: 3px;top: 0;z-index: 5;#margin-left:-10px;}*!*/
+/*.jq22-search-form .search-hd .btn-search{width: 70px;height: 38px;line-height:34px;position: absolute;right: 0px;top: 3px;border: 0;z-index: 6;cursor: pointer;font-size: 12px;color: #00b0b6;font-weight: 700;background-color: #f8f8f8;outline: none;}*/
+/*!*.jq22-search-form .search-hd .pholder{display: inline-block;padding: 2px 0;font-size: 12px;color: #999;position: absolute;left: 13px;top: 11px;z-index: 4;background: url(images/zoom.jpg) no-repeat 0 0;padding-left:25px;#top:11px;}*!*/
+/*.jq22-search-form .search-hd .s2,.jq22-search-form .search-hd #s2{display: none;}*/
+/*.jq22-search-form .search-hd .s3,.jq22-search-form .search-hd #s3{display: none;}*/
+/*!*.jq22-search-form .search-bg{width: 495px;height: 34px;background-color: #fff;position: absolute;left: 3px;top: 3px;z-index: 1;}*!*/
+/*.jq22-search-form .search-bg{width: 495px;height: 34px;position: absolute;left: 3px;top: 3px;z-index: 1;}*/

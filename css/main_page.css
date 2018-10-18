@@ -120,10 +120,24 @@ body{
     /*height: inherit;*/
     /*float: right;*/
     margin-left: 30px;
-    margin-riht: 30px;
+    margin-right: 30px;
 }
 
 /*选择下拉框的宽度*/
 #search_type{
     width: 131px;
 }
+
+/*#search_title input{*/
+     /*width:77%;*/
+    /*height: 80%;*/
+    /*border: 0 0 0 0 ;*/
+    /*position:relative;*/
+ /*}*/
+/*.selectBox button{*/
+    /*width:12%;*/
+    /*height: 80%;*/
+    /*border: 0 0 0 0 ;*/
+    /*position: relative;*/
+    /*top: 4px;*/
+/*}*/

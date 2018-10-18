@@ -17,7 +17,9 @@ neo4jd3 = new Neo4jD3('#GraphContainer', {
     D3Data: startData,
     zoomFit: false,
     infoPanel: true,
+    infoPanelSelector: "#flowPanel",
     onNodeDoubleClick: onNodeDoubleClick,
+    onNodeClick: onNodeClick,
     icons: {
         'Api': 'gear',
         'Cookie': 'paw',
@@ -253,15 +255,28 @@ function onNodeDoubleClick(d) {
 
 }
 
-//
-// function show_hide_graph(){
-//     var getDisplay = $(".showGroup").css('display');
-//     if(getDisplay != "none"){
-//         $(".showGroup").css('display', 'none');
-//     }else{
-//         $(".showGroup").show();
-//     }
-// }
+function onNodeClick(d) {
+    $("#flowPanel").show();
+    let nodeID = d.id;
+    let hide = "<b><i onclick=hide_flow_panel()><span class='glyphicon glyphicon-arrow-right'></span>Click to hide</i></b><br>";
+
+    currentnodeID = nodeID;
+    currentnodeX = d.x;
+    currentnodeY = d.y;
+
+    if (neo4jd3) {
+        neo4jd3.updateInfo(d);
+    }
+    $("#flowPanel").prepend(hide);
+    $("#flowPanel").fadeIn();
+}
+
+function hide_flow_panel(){
+    var getDisplay = $("#flowPanel").css('display');
+    if(getDisplay != "none"){
+        $("#flowPanel").css('display', 'none');
+    }
+}
 
 //搜索按钮事件
 function jumpClick() {
@@ -632,4 +647,123 @@ function changeLabelCheckboxStatus(newLabels) {
     }
 }
 
-
+// $(function () {
+//     //通用头部搜索切换
+//     $('#search-hd .search-input').on('input propertychange', function () {
+//         var val = $(this).val();
+//         if (val.length > 0) {
+//             $('#search-hd .pholder').hide(0);
+//         } else {
+//             var index = $('#search-bd li.selected').index();
+//             $('#search-hd .pholder').eq(index).show().siblings('.pholder').hide(0);
+//         }
+//     })
+//     $('#search-bd li').click(function () {
+//         var index = $(this).index();
+//         $('#search-hd .pholder').eq(index).show().siblings('.pholder').hide(0);
+//         $('#search-hd .search-input').eq(index).show().siblings('.search-input').hide(0);
+//         $(this).addClass('selected').siblings().removeClass('selected');
+//         $('#search-hd .search-input').val('');
+//     });
+// })
+//
+//
+// $(function(){
+//
+//     //定义一个存储数据的数组，用于下面重复选择判断，删除标签
+//     var oliIdArray = [];
+//
+//     //点击输入框时候
+//     $(".selectBox .imitationSelect").on("click",function(event){
+//         $(this).parent().next().toggle();//ul弹窗展开
+//         $(this).next().toggleClass("fa-caret-up")//点击input选择适合，小图标动态切换
+//         if($(this).next().hasClass("fa-caret-down")){
+//             $(this).next().removeClass("fa-caret-down").addClass("fa-caret-up")//点击input选择适合，小图标动态切换
+//         }else{
+//             $(this).next().addClass("fa-caret-down").removeClass("fa-caret-up")//点击input选择适合，小图标动态切换
+//         }
+//         if (event.stopPropagation) {
+//             // 针对 Mozilla 和 Opera
+//             event.stopPropagation();
+//         }else if (window.event) {
+//             // 针对 IE
+//             window.event.cancelBubble = true;
+//         }
+//     });
+//
+//     //点击右边箭头icon时候
+//     $(".selectBox .fa").on("click",function(event){
+//         $(this).parent().next().toggle();//ul弹窗展开
+//         if($(this).hasClass("fa-caret-down")){
+//             $(this).removeClass("fa-caret-down").addClass("fa-caret-up")//点击input选择适合，小图标动态切换
+//         }else{
+//             $(this).addClass("fa-caret-down").removeClass("fa-caret-up")//点击input选择适合，小图标动态切换
+//         }
+//         if (event.stopPropagation) {
+//             // 针对 Mozilla 和 Opera
+//             event.stopPropagation();
+//         }else if (window.event) {
+//             // 针对 IE
+//             window.event.cancelBubble = true;
+//         }
+//     });
+//
+//     $(".selectUl button").click(function(event){
+//         event=event||window.event;
+//         $(this).addClass("actived_li");//点击当前的添加actived_li这个类；
+//         //var oliId = $(this).attr("oliId");
+//         var oliId = $(this).parent().attr("oliId");
+//         console.log("oliid",oliId);
+//         console.log("oliIdArray",oliIdArray);
+//         if(oliIdArray.indexOf(oliId)>-1){
+//
+//         }else{
+//             oliIdArray.push(oliId);
+//             console.log("oliid",oliId);
+//             console.log("oliIdArray",oliIdArray);
+// //            $(this).parent().prev().children().attr("oliId",oliIdArray);//把当前点击的oliId赋值到显示的input的oliId里面
+//             $(this).parent().parent().prev().children().attr("oliId",oliIdArray);//把当前点击的oliId赋值到显示的input的oliId里面
+//             console.log("^^^",$(this).parent().parent().prev(".inputCase").children()[0]);
+//             // console.log("###",$(this).parent().val());
+//             console.log("@@@",$(this).prev().val());
+//             $(this).parent().parent().prev(".inputCase").firstChild().append("<span class='person_root'><span>"+$(this).prev().val()+"</span><i class='close' oliId='" + oliId + "' >x</i></span>");
+//         }
+//         console.log(oliIdArray)
+//         oliDelete();
+//
+//
+//     });
+//
+//     function oliDelete(){
+//         //进行绑定事件，每个删除事件得以进行
+//         var role_select = document.getElementById("role_select");
+//         var role_span= role_select.getElementsByTagName('i');
+//         var id;
+//         //console.log("span的选择个数"+role_span.length)l
+//         for(var i=0;i<role_span.length;i++){
+//             role_span[i].onclick = function(){
+//                 $(".selectUl").hide();
+//                 var oliId = $(this).attr("oliId");
+//                 //console.log("oliId"+oliId)
+//                 for (var i = 0; i < oliIdArray.length; i++){
+//                     if (oliIdArray[i] === oliId){ //表示数组里面有这个元素
+//                         id = i;//元素位置
+//                         oliIdArray.splice(i,1);
+//                         console.log('删除当前的序号'+oliId+';'+'剩下数组'+oliIdArray)
+//                     }
+//                 }
+//                 $(".selectUl li").eq(oliId-1).removeClass("actived_li");
+//                 $(this).parent().remove();
+//             }
+//         }
+//     }
+//
+//     //点击任意地方隐藏下拉
+//     // $(document).click(function(event){
+//     //     event=event||window.event;
+//     //     $(".inputCase .fa").removeClass("fa-caret-up").addClass("fa-caret-down")//当点隐藏ul弹窗时候，把小图标恢复原状
+//     //     $(".selectUl").hide();//当点击空白处，隐藏ul弹窗
+//     // });
+//
+// })
+//
