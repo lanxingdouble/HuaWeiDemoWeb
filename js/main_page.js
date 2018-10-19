@@ -303,6 +303,7 @@ function click_for_result() {
     $("#Graph").css('display', 'none');
     //判断搜索方式
     if(search_type==0) {
+        var sum=0;
         var query = {
             "name": $(".cat_header input").val(),
             "clone_from": parseInt($(".cat_header .cat_list").children(".float").children(".clearfix").eq(0).children("li").eq(1).attr("id")),
@@ -315,46 +316,56 @@ function click_for_result() {
         if(isNaN(query["clone_from"])){
             console.log("@@@@@@@@@@@@@@@");
             query["clone_from"]=-1;
+            sum=sum+1;
         }
         if(isNaN(query["related_developer"])){
             query["related_developer"]=-1;
+            sum=sum+1;
         }
         if(isNaN(query["call_same_common_api"])){
             query["call_same_common_api"]=-1;
+            sum=sum+1;
         }
         if(isNaN(query["from_project"])){
             query["from_project"]=-1;
+            sum=sum+1;
         }
         if(isNaN(query["concept"])){
             query["concept"]=-1;
+            sum=sum+1;
         }
         console.log("query: ",query);
-        $.ajax({
-            async: true,
-            url: "http://bigcode.fudan.edu.cn/dysd3/MethodSearch/",
-            type: "post",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({"query": query}),
-            error: function (xhr, status, errorThrown) {
-                console.log("Error " + errorThrown);
-                console.log("Status: " + status);
-                console.log(xhr);
-                alert("error,can't find result");
-            },
-            success: function (d) {
-                if (d.length > 0) {
-                    get_expand_nodes(d[0].kg_id);
-                    console.log("api concept:" + d);
-                    $(".showGroup").show();
-                    $("#searchresult").show();
-                    $("#Graph").show();
-                    $("#method_search_script").tmpl(d).appendTo("#searchresult");
-                } else {
-                    alert("can't find result");
+        if(sum<5 || query["name"].length>0) {
+            $.ajax({
+                async: true,
+                url: "http://bigcode.fudan.edu.cn/dysd3/MethodSearch/",
+                type: "post",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({"query": query}),
+                error: function (xhr, status, errorThrown) {
+                    console.log("Error " + errorThrown);
+                    console.log("Status: " + status);
+                    console.log(xhr);
+                    alert("error,can't find result");
+                },
+                success: function (d) {
+                    if (d.length > 0) {
+                        get_expand_nodes(d[0].kg_id);
+                        console.log("api concept:" + d);
+                        $(".showGroup").show();
+                        $("#searchresult").show();
+                        $("#Graph").show();
+                        $("#method_search_script").tmpl(d).appendTo("#searchresult");
+                    } else {
+                        alert("can't find result");
+                    }
                 }
-            }
-        });
+            });
+        }else{
+            alert("empty input!");
+        }
     }else if(search_type==1){
+        var sum=0;
         var query = {
             "name": $(".cat_header input").val(),
             "concept": parseInt($(".cat_header .cat_list").children(".float").children(".clearfix").eq(0).children("li").eq(1).attr("id")),
@@ -364,40 +375,48 @@ function click_for_result() {
         }
         if(isNaN(query["concept"])){
             query["concept"]=-1;
+            sum=sum+1;
         }
         if(isNaN(query["solver"])){
             query["solver"]=-1;
+            sum=sum+1;
         }
         if(isNaN(query["reporter"])){
             query["reporter"]=-1;
+            sum=sum+1;
         }
         console.log("query: ",query);
-        $.ajax({
-            async: true,
-            url: "http://bigcode.fudan.edu.cn/dysd3/IssueSearch/",
-            type: "post",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({"query": query}),
-            error: function (xhr, status, errorThrown) {
-                console.log("Error " + errorThrown);
-                console.log("Status: " + status);
-                console.log(xhr);
-                alert("error,can't find result");
-            },
-            success: function (d) {
-                if (d.length > 0) {
-                    get_expand_nodes(d[0].kg_id);
-                    console.log("api concept:" + d);
-                    $(".showGroup").show();
-                    $("#searchresult").show();
-                    $("#Graph").show();
-                    $("#issue_search_script").tmpl(d).appendTo("#searchresult");
-                } else {
-                    alert("can't find result");
+        if(sum<3 || query["name"].length>0) {
+            $.ajax({
+                async: true,
+                url: "http://bigcode.fudan.edu.cn/dysd3/IssueSearch/",
+                type: "post",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({"query": query}),
+                error: function (xhr, status, errorThrown) {
+                    console.log("Error " + errorThrown);
+                    console.log("Status: " + status);
+                    console.log(xhr);
+                    alert("error,can't find result");
+                },
+                success: function (d) {
+                    if (d.length > 0) {
+                        get_expand_nodes(d[0].kg_id);
+                        console.log("api concept:" + d);
+                        $(".showGroup").show();
+                        $("#searchresult").show();
+                        $("#Graph").show();
+                        $("#issue_search_script").tmpl(d).appendTo("#searchresult");
+                    } else {
+                        alert("can't find result");
+                    }
                 }
-            }
-        });
+            });
+        }else{
+            alert("empty input!");
+        }
     }else{
+        var sum=0;
         var query = {
             "name": $(".cat_header input").val(),
             "concept": parseInt($(".cat_header .cat_list").children(".float").children(".clearfix").eq(0).children("li").eq(1).attr("id")),
@@ -407,39 +426,46 @@ function click_for_result() {
         }
         if(isNaN(query["solve_issue"])){
             query["solve_issue"]=-1;
+            sum=sum+1;
         }
         if(isNaN(query["report_issue"])){
             query["report_issue"]=-1;
+            sum=sum+1;
         }
         if(isNaN(query["joint_project"])){
             query["joint_project"]=-1;
+            sum=sum+1;
         }
         console.log("query: ",query);
-        $.ajax({
-            async: true,
-            url: "http://bigcode.fudan.edu.cn/dysd3/ReporterSearch/",
-            type: "post",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({"query": query}),
-            error: function (xhr, status, errorThrown) {
-                console.log("Error " + errorThrown);
-                console.log("Status: " + status);
-                console.log(xhr);
-                alert("error,can't find result");
-            },
-            success: function (d) {
-                if (d.length > 0) {
-                    get_expand_nodes(d[0].kg_id);
-                    console.log("api concept:" + d);
-                    $(".showGroup").show();
-                    $("#searchresult").show();
-                    $("#Graph").show();
-                    $("#developer_search_script").tmpl(d).appendTo("#searchresult");
-                } else {
-                    alert("can't find result");
+        if(sum<3 || query["name"].length>0) {
+            $.ajax({
+                async: true,
+                url: "http://bigcode.fudan.edu.cn/dysd3/ReporterSearch/",
+                type: "post",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({"query": query}),
+                error: function (xhr, status, errorThrown) {
+                    console.log("Error " + errorThrown);
+                    console.log("Status: " + status);
+                    console.log(xhr);
+                    alert("error,can't find result");
+                },
+                success: function (d) {
+                    if (d.length > 0) {
+                        get_expand_nodes(d[0].kg_id);
+                        console.log("api concept:" + d);
+                        $(".showGroup").show();
+                        $("#searchresult").show();
+                        $("#Graph").show();
+                        $("#developer_search_script").tmpl(d).appendTo("#searchresult");
+                    } else {
+                        alert("can't find result");
+                    }
                 }
-            }
-        });
+            });
+        }else{
+            alert("empty input!");
+        }
     }
 }
 

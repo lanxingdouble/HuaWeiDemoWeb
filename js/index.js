@@ -70,9 +70,13 @@ function search_criteria_clone(item) {
                 if (d === "fail") {
                     return
                 }
-                $(item).parent().children("ul").html("");
-                for (var i = 0; i < d.length; i++) {
-                    $(item).parent().children("ul").append("<li><a href=\"#\" onclick=\"add_to_the_left(this)\" id="+d[i].kg_id+">"+d[i].name+"</a></li>");
+                if(d.length>0) {
+                    $(item).parent().children("ul").html("");
+                    for (var i = 0; i < d.length; i++) {
+                        $(item).parent().children("ul").append("<li><a href=\"#\" onclick=\"add_to_the_left(this)\" id=" + d[i].kg_id + ">" + d[i].name + "</a></li>");
+                    }
+                }else{
+                    alert("can't find result");
                 }
             }
         });
@@ -100,9 +104,13 @@ function search_criteria_developer(item) {
                 if (d === "fail") {
                     return
                 }
-                $(item).parent().children("ul").html("");
-                for (var i = 0; i < d.length; i++) {
-                    $(item).parent().children("ul").append("<li><a href=\"#\" onclick=\"add_to_the_left(this)\" id="+d[i].kg_id+">"+d[i].name+"</a></li>");
+                if(d.length>0) {
+                    $(item).parent().children("ul").html("");
+                    for (var i = 0; i < d.length; i++) {
+                        $(item).parent().children("ul").append("<li><a href=\"#\" onclick=\"add_to_the_left(this)\" id=" + d[i].kg_id + ">" + d[i].name + "</a></li>");
+                    }
+                }else{
+                    alert("can't find result");
                 }
             }
         });
@@ -131,9 +139,13 @@ function search_criteria_CommonAPISearch(item) {
                 if (d === "fail") {
                     return
                 }
-                $(item).parent().children("ul").html("");
-                for (var i = 0; i < d.length; i++) {
-                    $(item).parent().children("ul").append("<li><a href=\"#\" onclick=\"add_to_the_left(this)\" id="+d[i].kg_id+">"+d[i].name+"</a></li>");
+                if(d.length>0) {
+                    $(item).parent().children("ul").html("");
+                    for (var i = 0; i < d.length; i++) {
+                        $(item).parent().children("ul").append("<li><a href=\"#\" onclick=\"add_to_the_left(this)\" id=" + d[i].kg_id + ">" + d[i].name + "</a></li>");
+                    }
+                }else{
+                    alert("can't find result");
                 }
             }
         });
@@ -162,9 +174,13 @@ function search_criteria_ConceptSearch(item) {
                 if (d === "fail") {
                     return
                 }
-                $(item).parent().children("ul").html("");
-                for (var i = 0; i < d.length; i++) {
-                    $(item).parent().children("ul").append("<li><a href=\"#\" onclick=\"add_to_the_left(this)\" id="+d[i].kg_id+">"+d[i].name+"</a></li>");
+                if(d.length>0) {
+                    $(item).parent().children("ul").html("");
+                    for (var i = 0; i < d.length; i++) {
+                        $(item).parent().children("ul").append("<li><a href=\"#\" onclick=\"add_to_the_left(this)\" id=" + d[i].kg_id + ">" + d[i].name + "</a></li>");
+                    }
+                }else{
+                    alert("can't find result");
                 }
             }
         });
@@ -184,13 +200,17 @@ function search_criteria_project(item) {
             console.log(xhr);
         },
         success: function (d) {
+            console.log("project_search:",d);
             if (d === "fail") {
                 return
             }
-            console.log("project_search:",d);
-            $(item).parent().children("ul").html("");
-            for (var i = 0; i < d.length; i++) {
-                $(item).parent().children("ul").append("<li><a href=\"#\" onclick=\"add_to_the_left(this)\" id="+d[i].kg_id+">"+d[i].project_name+"</a></li>");
+            if(d.length>0) {
+                $(item).parent().children("ul").html("");
+                for (var i = 0; i < d.length; i++) {
+                    $(item).parent().children("ul").append("<li><a href=\"#\" onclick=\"add_to_the_left(this)\" id=" + d[i].kg_id + ">" + d[i].project_name + "</a></li>");
+                }
+            }else{
+                alert("can't find result");
             }
         }
     });
@@ -218,9 +238,13 @@ function search_criteria_Related_Issue(item) {
                 if (d === "fail") {
                     return
                 }
-                $(item).parent().children("ul").html("");
-                for (var i = 0; i < d.length; i++) {
-                    $(item).parent().children("ul").append("<li><a href=\"#\" onclick=\"add_to_the_left(this)\" id="+d[i].kg_id+">"+d[i].name+"</a></li>");
+                if(d.length>0) {
+                    $(item).parent().children("ul").html("");
+                    for (var i = 0; i < d.length; i++) {
+                        $(item).parent().children("ul").append("<li><a href=\"#\" onclick=\"add_to_the_left(this)\" id=" + d[i].kg_id + ">" + d[i].name + "</a></li>");
+                    }
+                }else{
+                    alert("can't find result");
                 }
             }
         });
