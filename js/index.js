@@ -40,6 +40,7 @@ $('.cat_subcont').mouseleave(function () {
 });
 
 function add_to_the_left(item) {
+    $(item).addClass('active');
     var thisUB = $('.cat_subcont .cat_sublist').index($(item).parent().parent().parent().parent().parent());
     $('.cat_list .float').eq(thisUB).children().eq(0).children().eq(1).html($(item).text());
     // console.log('id:',$(item).attr("id"));

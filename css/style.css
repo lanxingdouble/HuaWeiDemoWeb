@@ -144,9 +144,8 @@ a, li {
 
 #nav ul li:first-child {
 	margin-left: 17%;
-	margin-top: 0px
+	margin-top: 0px;
 }
-
 #nav ul li  {
 	font-size: 16px;
 	color: #fff;
@@ -213,6 +212,12 @@ a, li {
 	font-size: 14px;
 	margin: 7px 0px;
 }
+
+.cat_header ul li:first-child {
+    font-weight: bold;
+    font-size: 14px;
+}
+
 .cat_wrap .clearfix li {
 	float: left;
 	color: #323232;
@@ -243,6 +248,9 @@ a, li {
 /*banner浮层滑动显示弹框*/
 .cat_subcont {
 	display: none;
+}
+.cat_subcont li{
+    text-decoration:underline;
 }
 
 .cat_subcont.active {
@@ -298,6 +306,10 @@ a, li {
 .cat_subcont .cat_sublist .fore1 .fore_list li a:hover {
 	color: #00a1ea;
 	text-decoration: underline;
+}
+
+.cat_subcont .cat_sublist .fore1 .fore_list li a.active{
+    color: #00a1ea;
 }
 
 #search_btn {
