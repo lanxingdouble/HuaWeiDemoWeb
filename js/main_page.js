@@ -390,8 +390,8 @@ function click_for_result() {
                     console.log("api concept:" + d);
                     $(".showGroup").show();
                     $("#searchresult").show();
-                    //$("#Graph").show();
-                    $("#method_search_script").tmpl(d).appendTo("#searchresult");
+                    $("#Graph").show();
+                    $("#issue_search_script").tmpl(d).appendTo("#searchresult");
                 } else {
                     alert("can't find result");
                 }
@@ -433,8 +433,8 @@ function click_for_result() {
                     console.log("api concept:" + d);
                     $(".showGroup").show();
                     $("#searchresult").show();
-                    //$("#Graph").show();
-                    $("#method_search_script").tmpl(d).appendTo("#searchresult");
+                    $("#Graph").show();
+                    $("#developer_search_script").tmpl(d).appendTo("#searchresult");
                 } else {
                     alert("can't find result");
                 }
@@ -454,6 +454,7 @@ function navigation_bar_style_change(item, index) {
     $(item).addClass('active');
     $('.cat_wrap .cat_list').html("");
     d = [{"name": "ewqf"}];
+    $("#name_btn").val("");
     search_type=index;
     if (index == 0) {
         $("#api_concept_bar_script").tmpl(d).appendTo('.cat_wrap .cat_list');

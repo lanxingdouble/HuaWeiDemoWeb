@@ -144,6 +144,7 @@ a, li {
 
 #nav ul li:first-child {
 	margin-left: 17%;
+	margin-top: 0px
 }
 
 #nav ul li  {
@@ -152,16 +153,19 @@ a, li {
 	line-height: 30px;
 	padding: 0 35px;
 	display: inline-block;
+	margin-top: 0px
 }
 
 #nav ul li:hover {
 	background: #fff000;
 	color: #00a1ea;
+	margin-top: 0px
 }
 
 #nav ul li.active  {
 	background: #fff000;
 	color: #00a1ea;
+	margin-top: 0px
 }
 
 /*banner上面浮层*/
@@ -172,7 +176,7 @@ a, li {
 	width: 280px;
 	position: absolute;
 	z-index: 999;
-	top: -75px !important;
+	top: -90px;
 }
 #show_page{
 	height:inherit !important;
