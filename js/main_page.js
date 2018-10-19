@@ -1,19 +1,22 @@
-let neo4jd3;
 let startData = {
     "nodes": [],
     "relationships": []
 };
-let labelProperty=[];
-let all_labels_color=["Software Concept", "Descriptive Knowledge", "API Concept", "API Package", "API Class", "API Interface", "API Field", "API Method", "API Parameter", "API Return Value","Exception"];
-var labelList=[];
-var labelStatusList=[];
-var relationStatusList=[];
-var nodesAndRelations=[];
-var relationList=[];
+let labelProperty = [];
+let all_labels_color = ["Software Concept", "Descriptive Knowledge", "API Concept", "API Package", "API Class", "API Interface", "API Field", "API Method", "API Parameter", "API Return Value", "Exception"];
+var labelList = [];
+var labelStatusList = [];
+var relationStatusList = [];
+var nodesAndRelations = [];
+var relationList = [];
 var labels_set = [];
 var color_index = 0;
-
-neo4jd3 = new Neo4jD3('#GraphContainer', {
+// var id1;
+// var id2;
+// var id3;
+// var id4;
+// var id5;
+let neo4jd3 = new Neo4jD3('#GraphContainer', {
     D3Data: startData,
     zoomFit: false,
     infoPanel: true,
@@ -109,7 +112,7 @@ function get_expand_nodes(kg_id) {
             //console.log("labels_set", labels_set);
             for (var value of labels_set) {
                 var color_label = {};
-                color_index=all_labels_color.indexOf(value);
+                color_index = all_labels_color.indexOf(value);
                 //console.log("color index : ",color_index);
                 color_label["color"] = generateRandomColor(color_index);
                 color_label["name"] = value;
@@ -151,12 +154,13 @@ function get_expand_nodes(kg_id) {
             neo4jd3.updateWithD3Data(D3Data);
             neo4jd3.nodesColor();
             nodesAndRelations.push(D3Data);
-            console.log("第一次加载nodeandrelation :",nodesAndRelations);
+            console.log("第一次加载nodeandrelation :", nodesAndRelations);
             //console.log("加载时labelstuteliae:",labelStatusList);
             console.log(d);
         }
     });
 }
+
 //双击扩展节点
 function onNodeDoubleClick(d) {
     let nodeID = d.id;
@@ -181,10 +185,10 @@ function onNodeDoubleClick(d) {
             }
             var labels = []
             $.each(d.nodes, function (i, val) {
-                if(labels_set.has(d.nodes[i]["labels"][0])==false) {
+                if (labels_set.has(d.nodes[i]["labels"][0]) == false) {
                     labels_set.add(d.nodes[i]["labels"][0]);
                     var color_label = {};
-                    color_index=all_labels_color.indexOf(d.nodes[i]["labels"][0]);
+                    color_index = all_labels_color.indexOf(d.nodes[i]["labels"][0]);
                     color_label["color"] = generateRandomColor(color_index);
                     color_label["name"] = d.nodes[i]["labels"][0];
                     //console.log("color_label", color_label);
@@ -198,7 +202,7 @@ function onNodeDoubleClick(d) {
                 //     d.nodes[i]["name"] = get_simple_name(d.nodes[i]["name"]);
                 // }
                 d.nodes[i]["x"] = dx;
-                d.nodes[i]["y"] =dy;
+                d.nodes[i]["y"] = dy;
                 getLabelSet(val.labels);
                 getLabelStatusList(val.labels);
             });
@@ -217,19 +221,19 @@ function onNodeDoubleClick(d) {
             }
             //console.log("扩展new_relations:",new_relations);
             //修复双击扩展后不能选择label的bug，因为有部分["source"]["target"],不是节点
-            for(var i=0;i<new_relations.length;i++){
+            for (var i = 0; i < new_relations.length; i++) {
                 //console.log(new_relations[i]);
                 //console.log(i,typeof(new_relations[i]["source"]));
-                if(typeof(new_relations[i]["source"])=="number"){
-                    for(var j=0;j<new_nodes.length;j++){
-                        if(new_nodes[j]["id"]==new_relations[i]["source"]){
-                            new_relations[i]["source"]=new_nodes[j];
+                if (typeof(new_relations[i]["source"]) == "number") {
+                    for (var j = 0; j < new_nodes.length; j++) {
+                        if (new_nodes[j]["id"] == new_relations[i]["source"]) {
+                            new_relations[i]["source"] = new_nodes[j];
                             break;
                         }
                     }
-                    for(var j=0;j<new_nodes.length;j++){
-                        if(new_nodes[j]["id"]==new_relations[i]["target"]){
-                            new_relations[i]["target"]=new_nodes[j];
+                    for (var j = 0; j < new_nodes.length; j++) {
+                        if (new_nodes[j]["id"] == new_relations[i]["target"]) {
+                            new_relations[i]["target"] = new_nodes[j];
                             break;
                         }
                     }
@@ -240,7 +244,7 @@ function onNodeDoubleClick(d) {
                 "nodes": new_nodes,
                 "relationships": new_relations
             };
-            console.log("D3Data:",D3Data);
+            console.log("D3Data:", D3Data);
             nodesAndRelations.push(D3Data);
             neo4jd3.updateWithD3Data(D3Data);
             //getRelationStatusList(d.relations);
@@ -271,21 +275,76 @@ function onNodeClick(d) {
     $("#flowPanel").fadeIn();
 }
 
-function hide_flow_panel(){
+function hide_flow_panel() {
     var getDisplay = $("#flowPanel").css('display');
-    if(getDisplay != "none"){
+    if (getDisplay != "none") {
         $("#flowPanel").css('display', 'none');
     }
 }
 
+function click_for_result() {
+    console.log("*********************");
+    $("#right_page h2").html("click click click click ********************* *********************");
+
+    labelProperty = [];
+    labelList = [];
+    labelStatusList = [];
+    relationStatusList = [];
+    nodesAndRelations = [];
+    relationList = [];
+    labels_set = [];
+    $("#labelList").html("");
+    $("#searchresult").html("");
+    //$(".showGroup").css('display', 'none');
+    $("#searchresult").css('display', 'none');
+    $("#Graph").css('display', 'none');
+    var query = {
+        "name": $(".cat_header input").val(),
+        "clone_from": parseInt($(".cat_header .cat_list").children(".float").children(".clearfix").eq(0).children("li").eq(1).attr("id")),
+        "related_developer": parseInt($(".cat_header .cat_list").children(".float").children(".clearfix").eq(1).children("li").eq(1).attr("id")),
+        "call_same_common_api": parseInt($(".cat_header .cat_list").children(".float").children(".clearfix").eq(2).children("li").eq(1).attr("id")),
+        "from_project": parseInt($(".cat_header .cat_list").children(".float").children(".clearfix").eq(3).children("li").eq(1).attr("id")),
+        "concept": parseInt($(".cat_header .cat_list").children(".float").children(".clearfix").eq(4).children("li").eq(1).attr("id"))
+    }
+
+    // console.log( "clone_from", $(".cat_header .cat_list").children(".float").eq(0).children(".clearfix"));
+    console.log("query: ",query);
+    //判断搜索方式
+    $.ajax({
+        async: true,
+        url: "http://bigcode.fudan.edu.cn/dysd3/MethodSearch/",
+        type: "post",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({"query": query}),
+        error: function (xhr, status, errorThrown) {
+            console.log("Error " + errorThrown);
+            console.log("Status: " + status);
+            console.log(xhr);
+            alert("error,can't find result");
+        },
+        success: function (d) {
+            if (d.length > 0) {
+                get_expand_nodes(d[0].kg_id);
+                console.log("api concept:" + d);
+                $(".showGroup").show();
+                $("#searchresult").show();
+                //$("#Graph").show();
+                $("#method_search_script").tmpl(d).appendTo("#searchresult");
+            } else {
+                alert("can't find result");
+            }
+        }
+    });
+}
+
 //搜索按钮事件
 function jumpClick() {
-    labelProperty=[];
-    labelList=[];
-    labelStatusList=[];
-    relationStatusList=[];
-    nodesAndRelations=[];
-    relationList=[];
+    labelProperty = [];
+    labelList = [];
+    labelStatusList = [];
+    relationStatusList = [];
+    nodesAndRelations = [];
+    relationList = [];
     labels_set = [];
     $("#labelList").html("");
     $("#searchresult").html("");
@@ -294,9 +353,9 @@ function jumpClick() {
     $("#Graph").css('display', 'none');
     var search_type = parseInt($('#search_type option:selected').val());
     var textvalue = $("input[class='form-control']").val();
-    if (textvalue.length>0) {
+    if (textvalue.length > 0) {
         //判断搜索方式
-        if (search_type==1) {
+        if (search_type == 1) {
             $.ajax({
                 async: true,
                 url: "http://bigcode.fudan.edu.cn/dysd3/MethodSearch/",
@@ -312,17 +371,17 @@ function jumpClick() {
                 success: function (d) {
                     if (d.length > 0) {
                         get_expand_nodes(d[0].kg_id);
-                        console.log("api concept:"+d);
+                        console.log("api concept:" + d);
                         $(".showGroup").show();
                         $("#searchresult").show();
                         $("#Graph").show();
                         $("#method_search_script").tmpl(d).appendTo("#searchresult");
-                    }else{
+                    } else {
                         alert("can't find result");
                     }
                 }
             });
-        }else if(search_type==2){
+        } else if (search_type == 2) {
             $.ajax({
                 async: true,
                 url: "http://bigcode.fudan.edu.cn/dysd3/IssueQuery/",
@@ -337,18 +396,18 @@ function jumpClick() {
                 success: function (d) {
                     if (d.length > 0) {
                         get_expand_nodes(d[0].kg_id);
-                        console.log("issue:"+d);
+                        console.log("issue:" + d);
                         $(".showGroup").show();
                         $("#searchresult").show();
                         $("#Graph").show();
                         $("#issue_search_script").tmpl(d).appendTo("#searchresult");
-                    }else{
+                    } else {
                         alert("can't find result");
                     }
                 }
             });
 
-        }else{
+        } else {
             $.ajax({
                 async: true,
                 url: "http://bigcode.fudan.edu.cn/dysd3/DeveloperQuery/",
@@ -363,12 +422,12 @@ function jumpClick() {
                 success: function (d) {
                     if (d.length > 0) {
                         get_expand_nodes(d[0].kg_id);
-                        console.log("developer:"+d);
+                        console.log("developer:" + d);
                         $(".showGroup").show();
                         $("#searchresult").show();
                         $("#Graph").show();
                         $("#developer_search_script").tmpl(d).appendTo("#searchresult");
-                    }else{
+                    } else {
                         alert("can't find result");
                     }
                 }
@@ -482,7 +541,7 @@ function repaintNodes() {
             for (let k = 0; k < tempNR[j].relationships.length; k++) {
                 let source = tempNR[j].relationships[k].source;
                 let target = tempNR[j].relationships[k].target;
-               // console.log("source labels :", k ,source.labels);
+                // console.log("source labels :", k ,source.labels);
                 if (labelStatusList[i].status === false && (labelStatusList[i].name === source.labels[0] || labelStatusList[i].name === target.labels[0])) {
                     tempNR[j].relationships.splice(k, 1);
                     k = k - 1;
@@ -526,7 +585,7 @@ function repaintNodes() {
     }
 
     for (let i = 0; i < tempNR.length; i++) {
-        console.log("repaint node:",tempNR);
+        console.log("repaint node:", tempNR);
         neo4jd3.updateWithD3Data(tempNR[i]);
     }
     //console.log("画点nodesAndRelations： ",nodesAndRelations);
@@ -593,8 +652,8 @@ function changeRelationCheckboxStatus(originTypes, newTypes) {
         let relationCheckboxName = "relation-" + originTypes[i];
         if ($.inArray(originTypes[i], newTypes) === -1) {
             // $(relationCheckboxName).attr("checked", false);
-           // document.getElementById(relationCheckboxName).checked = false;
-           // console.log(document.getElementById(relationCheckboxName).checked);
+            // document.getElementById(relationCheckboxName).checked = false;
+            // console.log(document.getElementById(relationCheckboxName).checked);
             relationStatusList[originTypes[i]] = false;
             for (let j = 0; j < relationStatusList.length; j++) {
                 if (relationStatusList[j].name === originTypes[i]) {
@@ -603,8 +662,8 @@ function changeRelationCheckboxStatus(originTypes, newTypes) {
             }
         } else {
             // $(relationCheckboxName).attr("checked", true);
-           //document.getElementById(relationCheckboxName).checked = true;
-           // console.log(document.getElementById(relationCheckboxName).checked);
+            //document.getElementById(relationCheckboxName).checked = true;
+            // console.log(document.getElementById(relationCheckboxName).checked);
             for (let j = 0; j < relationStatusList.length; j++) {
                 if (relationStatusList[j].name === originTypes[i]) {
                     relationStatusList[j].status = true;

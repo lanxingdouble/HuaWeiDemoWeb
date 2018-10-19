@@ -116,118 +116,398 @@
          </li>
          </ul>
 </script>
-
+<!--KG颜色图标-->
 <script type="text/x-jquery-tmpl" id="labelTemplate">
         <label>
             <input type="checkbox" value="${name}" id="label-${name}" onclick="labelCheckClick('${name}')" checked="checked">
             <label><span class='label' style='background-color:${color}'>${name}</span></label>
         </label>
 </script>
-<!--<script id="method_detail_script" type="text/x-jquery-tmpl">-->
-<!--<ul class="blockList">-->
-<!--<li class="blockList" >-->
-<!--<h2>${method_name}</h2>-->
-<!--<ul class="blockList">-->
-<!--<li class="blockList">-->
-<!--<pre>${declaration}</pre>-->
-<!--<div class="block">${class_define}</div>-->
-<!--<dl>-->
-<!--{{if method_descriptions_list.length >= 1}}-->
-<!--{{each(j,group) method_descriptions_list}}-->
-<!--{{if group.method_description_from_comment}}-->
-<!--<dd>${group.method_description_from_comment}</dd>-->
-<!--{{else}}-->
-<!--{{if group.short_description}}-->
-<!--<dd>${group.short_description}</dd>-->
-<!--{{else}}-->
-<!--{{if group.poi_human_description}}-->
-<!--<dd>${group.poi_human_description}</dd>-->
-<!--{{else}}-->
-<!--{{if group.poi_rule_description}}-->
-<!--<dd>${group.poi_rule_description}</dd>-->
-<!--{{else}}-->
-<!--{{if group.poi_deep_learning_description}}-->
-<!--<dd>${group.poi_deep_learning_description}</dd>-->
-<!--{{else}}-->
-<!--{{/if}}-->
-<!--{{/if}}-->
-<!--{{/if}}-->
-<!--{{/if}}-->
-<!--{{/if}}-->
-<!--{{/each}}-->
-<!--{{else}}-->
-<!--{{/if}}-->
-<!--<dt><span class="returnLabel">Returns:</span></dt>-->
-<!--<dd>${return_type}</dd>-->
-<!--{{if related_concept.length >= 1}}-->
-<!--<dt><span class="seeLabel">Releated Concept:</span></dt>-->
-<!--{{each(j,group) related_concept}}-->
-<!--<dd><a href="${group.url}" target="_blank" >${group.name}</a></dd>-->
-<!--{{/each}}-->
-<!--{{else}}-->
-<!--{{/if}}-->
-<!--<dt><span class="seeLabel">See Also:</span></dt>-->
-<!--{{if see_also.length >= 1}}-->
-<!--{{each(j,group) see_also}}-->
-<!--<dd><a onclick="get_class_kg_id_by_kg_id(${group.kg_id})" target="_blank" title=${group.api_name}>${group.simple_api_name}</a></dd>-->
-<!--{{/each}}-->
-<!--{{else}}-->
-<!--<dd>null</dd>-->
-<!--{{/if}}-->
-<!--</dl>-->
-<!--<div class="click_show_detail" id=${method_kg_id}  onclick="click_for_more_details(this,this.children,${method_kg_id})">Click For More Details-->
-<!--<div class="show_detail" id="method_functional${method_kg_id}" style="display:none text-decoration:none">-->
-<!--</div>-->
-<!--<div class="show_detail" id="methoddirective${method_kg_id}" style="display:none text-decoration:none">-->
-<!--</div>-->
-<!--<div class="show_detail" id="method_post${method_kg_id}" style="display:none text-decoration:none">-->
-<!--</div>-->
-<!--<div class="show_detail" id="method_sample_code${method_kg_id}" style="display:none text-decoration:none">-->
-<!--</div>-->
-<!--</div>-->
-<!--</li>-->
-<!--</ul>-->
-<!--</li>-->
-<!--</ul>-->
-<!--</script>-->
-
-<!--搜索框-->
-<div class="main-title">
-    <div class="text-center">HuaWeiDemo</div>
-    <div class="input-jump center-block">
-        <div class="col-lg">
-            <div class="input-group">
-                <span class="input-group-btn"><!-- /场景选择下拉菜单、搜索框和搜索button-->
-                    <select class="form-control btn btn-primary" id="search_type">
-                    <option value="1" selected>API Concept</option>
-                    <option value="2">Issue</option>
-                    <option value="3">Developer</option>
-                    </select>
-                </span>
-                <input type="text" autocomplete="on" class="form-control" onkeydown="keyup_submit(event)"
-                       placeholder="choose the right type on the left side ">
-                <span class="input-group-btn">
-                        <button class="btn btn-primary" type="button" id="bt1" onclick="jumpClick()">SEARCH
-                        </button>
-                </span>
-            </div><!-- /input-group -->
-        </div><!-- /.col-lg-6 -->
+<!--三种查询条件-->
+<script id="api_concept_bar_script" type="text/x-jquery-tmpl">
+    <div class="float for1">
+        <ul class="clearfix">
+        <li>clone_from:</li>
+        <li></li>
+        </ul>
     </div>
-</div>
-<div id="search_select">
-    
-</div>
-<!--搜索结果展示，左边文本40%，右边KG60%-->
-<div class="showGroup" style="display: none">
-    <div id="Graph">
-        <div id="labelProperty">
-            <div id="labelList">
+    <div class="float for1">
+        <ul class="clearfix">
+        <li>related_developer:</li>
+        <li></li>
+        </ul>
+    </div>
+    <div class="float for1">
+        <ul class="clearfix">
+        <li>same_common_api:</li>
+        <li></li>
+        </ul>
+    </div>
+    <div class="float for1">
+        <ul class="clearfix">
+        <li>from_project:</li>
+        <li></li>
+        </ul>
+    </div>
+    <div class="float for1">
+        <ul class="clearfix">
+        <li>concept:</li>
+        <li></li>
+        </ul>
+    </div>
+</script>
+<script id="api_concept_cat_subcont_bar_script" type="text/x-jquery-tmpl">
+    <div class="cat_sublist">
+        <!-- 浮层左边列表 -->
+        <div class="fore1">
+            <div class="fore_list">
+                <input type="text" autocomplete="on" onkeydown="keyup_submit(event)">
+                <button class="btn btn-primary" type="button"  onclick="search_criteria_clone(this)">SEARCH</button>
+                <hr>
+                <ul class="clearfix"></ul>
             </div>
         </div>
-        <div id="GraphContainer">
+    </div>
+    <div class="cat_sublist">
+        <!-- 浮层左边列表 -->
+        <div class="fore1">
+            <div class="fore_list">
+                <input type="text" autocomplete="on" onkeydown="keyup_submit(event)">
+                <button class="btn btn-primary" type="button"  onclick="search_criteria_developer(this)">SEARCH</button>
+                <hr>
+                <ul class="clearfix"></ul>
+            </div>
         </div>
     </div>
-    <div id="searchresult">
+    <div class="cat_sublist">
+        <!-- 浮层左边列表 -->
+        <div class="fore1">
+            <div class="fore_list">
+                <input type="text" autocomplete="on" onkeydown="keyup_submit(event)">
+                <button class="btn btn-primary" type="button"  onclick="search_criteria_CommonAPISearch(this)">SEARCH</button>
+                <hr>
+                <ul class="clearfix"></ul>
+            </div>
+        </div>
+    </div>
+    <div class="cat_sublist">
+        <!-- 浮层左边列表 -->
+        <div class="fore1">
+            <div class="fore_list">
+                <button class="btn btn-primary" type="button"  onclick="search_criteria_project(this)">SEARCH</button>
+                <hr>
+                <ul class="clearfix"></ul>
+            </div>
+        </div>
+    </div>
+    <div class="cat_sublist">
+        <!-- 浮层左边列表 -->
+        <div class="fore1">
+            <div class="fore_list">
+                <input type="text" autocomplete="on" onkeydown="keyup_submit(event)">
+                <button class="btn btn-primary" type="button"  onclick="search_criteria_ConceptSearch(this)">SEARCH</button>
+                <hr>
+                <ul class="clearfix"></ul>
+            </div>
+        </div>
+    </div>
+</script>
+<script id="issue_bar_script" type="text/x-jquery-tmpl">
+    <div class="float for1">
+        <ul class="clearfix">
+        <li>concept:</li>
+        <li></li>
+        </ul>
+    </div>
+    <div class="float for1">
+        <ul class="clearfix">
+        <li>solver:</li>
+        <li></li>
+        </ul>
+    </div>
+    <div class="float for1">
+        <ul class="clearfix">
+        <li>reporter:</li>
+        <li></li>
+        </ul>
+    </div>
+</script>
+<script id="issue_cat_subcont_bar_script" type="text/x-jquery-tmpl">
+    <div class="cat_sublist">
+        <!-- 浮层左边列表 -->
+        <div class="fore1">
+            <div class="fore_list">
+                <input type="text" autocomplete="on" onkeydown="keyup_submit(event)">
+                <button class="btn btn-primary" type="button"  onclick="search_criteria_ConceptSearch(this)">SEARCH</button>
+                <hr>
+                <ul class="clearfix"></ul>
+            </div>
+        </div>
+    </div>
+    <div class="cat_sublist">
+        <!-- 浮层左边列表 -->
+        <div class="fore1">
+            <div class="fore_list">
+                <input type="text" autocomplete="on" onkeydown="keyup_submit(event)">
+                <button class="btn btn-primary" type="button"  onclick="search_criteria_developer(this)">SEARCH</button>
+                <hr>
+                <ul class="clearfix"></ul>
+            </div>
+        </div>
+    </div>
+    <div class="cat_sublist">
+        <!-- 浮层左边列表 -->
+        <div class="fore1">
+            <div class="fore_list">
+                <input type="text" autocomplete="on" onkeydown="keyup_submit(event)">
+                <button class="btn btn-primary" type="button"  onclick="search_criteria_developer(this)">SEARCH</button>
+                <hr>
+                <ul class="clearfix"></ul>
+            </div>
+        </div>
+    </div>
+</script>
+<script id="developer_bar_script" type="text/x-jquery-tmpl">
+    <div class="float for1">
+        <ul class="clearfix">
+        <li>concept:</li>
+        <li></li>
+        </ul>
+    </div>
+    <div class="float for1">
+        <ul class="clearfix">
+        <li>solve_issue:</li>
+        <li></li>
+        </ul>
+    </div>
+    <div class="float for1">
+        <ul class="clearfix">
+        <li>report_issue:</li>
+        <li></li>
+        </ul>
+    </div>
+    <div class="float for1">
+        <ul class="clearfix">
+        <li>joint_project:</li>
+        <li></li>
+        </ul>
+    </div>
+</script>
+<script id="developer_cat_subcont_bar_script" type="text/x-jquery-tmpl">
+   <div class="cat_sublist">
+        <!-- 浮层左边列表 -->
+        <div class="fore1">
+            <div class="fore_list">
+                <input type="text" autocomplete="on" onkeydown="keyup_submit(event)">
+                <button class="btn btn-primary" type="button"  onclick="search_criteria_ConceptSearch(this)">SEARCH</button>
+                <hr>
+                <ul class="clearfix"></ul>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<!--搜索框-->
+<!--<div class="main-title">-->
+    <!--<div class="text-center">HuaWeiDemo</div>-->
+    <!--<div class="input-jump center-block">-->
+        <!--<div class="col-lg">-->
+            <!--<div class="input-group">-->
+                <!--<span class="input-group-btn">&lt;!&ndash; /场景选择下拉菜单、搜索框和搜索button&ndash;&gt;-->
+                    <!--<select class="form-control btn btn-primary" id="search_type">-->
+                    <!--<option value="1" selected>API Concept</option>-->
+                    <!--<option value="2">Issue</option>-->
+                    <!--<option value="3">Developer</option>-->
+                    <!--</select>-->
+                <!--</span>-->
+                <!--<input type="text" autocomplete="on" class="form-control" onkeydown="keyup_submit(event)"-->
+                       <!--placeholder="choose the right type on the left side ">-->
+                <!--<span class="input-group-btn">-->
+                        <!--<button class="btn btn-primary" type="button" id="bt1" onclick="jumpClick()">SEARCH-->
+                        <!--</button>-->
+                <!--</span>-->
+            <!--</div>&lt;!&ndash; /input-group &ndash;&gt;-->
+        <!--</div>&lt;!&ndash; /.col-lg-6 &ndash;&gt;-->
+    <!--</div>-->
+<!--</div>-->
+<!--<div id="search_select">-->
+    <!---->
+<!--</div>-->
+<!--搜索结果展示，左边文本40%，右边KG60%-->
+<!--<div class="showGroup" style="display: none">-->
+<!--<div id="Graph">-->
+<!--<div id="labelProperty">-->
+<!--<div id="labelList">-->
+<!--</div>-->
+<!--</div>-->
+<!--<div id="GraphContainer">-->
+<!--</div>-->
+<!--</div>-->
+<!--<div id="searchresult">-->
+<!--</div>-->
+<!--</div>-->
+<div id="nav">
+    <ul class="w">
+        <!--<li class="active"><a href="#">首页</a></li>-->
+        <li class="active" onclick="navigation_bar_style_change(this,0)">API Concept</li>
+        <li onclick="navigation_bar_style_change(this,1)">Issue Search</li>
+        <li onclick="navigation_bar_style_change(this,2)">Developer Search</li>
+    </ul>
+</div>
+<div id="show_page">
+    <div id="left_page" class="w clearfix " style="position:absolute;">
+        <!-- banner上面浮层 -->
+        <div class="cat_wrap">
+            <div class="cat_header">
+                <h3 class="cat_title">查询条件</h3>
+                <ul class="clearfix" id="name_clearfix">
+                    <li>name:</li>
+                    <li><input type="text" autocomplete="on"  onkeydown="keyup_submit(event)"></li>
+                </ul>
+                <div class="cat_list">
+                    <div class="float for1">
+                        <ul class="clearfix">
+                            <li>clone_from:</li>
+                            <li></li>
+                        </ul>
+                    </div>
+                    <div class="float for1">
+                        <ul class="clearfix">
+                            <li>related_developer:</li>
+                            <li></li>
+                        </ul>
+                    </div>
+                    <div class="float for1">
+                        <ul class="clearfix">
+                            <li>same_common_api:</li>
+                            <li></li>
+                        </ul>
+                    </div>
+                    <div class="float for1">
+                        <ul class="clearfix">
+                            <li>from_project:</li>
+                            <li></li>
+                        </ul>
+                    </div>
+                    <div class="float for1">
+                        <ul class="clearfix">
+                            <li>concept:</li>
+                            <li></li>
+                        </ul>
+                    </div>
+                </div>
+                <button id="search_btn" onclick="click_for_result()">search</button>
+            </div>
+            <!-- banner浮层滑动显示弹框 -->
+            <div class="cat_subcont">
+                <div class="cat_sublist">
+                    <!-- 浮层左边列表 -->
+                    <div class="fore1">
+                        <div class="fore_list">
+                            <input type="text" autocomplete="on" onkeydown="keyup_submit(event)">
+                                <button class="btn btn-primary" type="button"  onclick="search_criteria_clone(this)">SEARCH
+                                </button>
+                            <hr>
+                            <ul class="clearfix">
+                                <!--<li><a href="#" onclick="add_to_the_left(this)">《云计算基础架构》</a></li>-->
+                                <!--<li><a href="#" onclick="add_to_the_left(this)">《云平台》</a></li>-->
+                                <!--<li><a href="#" onclick="add_to_the_left(this)">《大数据》</a></li>-->
+                                <!--<li><a href="#" onclick="add_to_the_left(this)">《虚拟化技术》</a></li>-->
+                                <!--<li><a href="#" onclick="add_to_the_left(this)">《云计算基础架构》</a></li>-->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="cat_sublist">
+                    <!-- 浮层左边列表 -->
+                    <div class="fore1">
+                        <div class="fore_list">
+                            <input type="text" autocomplete="on" onkeydown="keyup_submit(event)">
+                            <button class="btn btn-primary" type="button"  onclick="search_criteria_developer(this)">SEARCH
+                            </button>
+                            <hr>
+                            <ul class="clearfix">
+                                <!--<li><a href="#" onclick="add_to_the_left(this)">《云计算基础架构》</a></li>-->
+                                <!--<li><a href="#" onclick="add_to_the_left(this)">《云平台》</a></li>-->
+                                <!--<li><a href="#" onclick="add_to_the_left(this)">《大数据》</a></li>-->
+                                <!--<li><a href="#" onclick="add_to_the_left(this)">《虚拟化技术》</a></li>-->
+                                <!--<li><a href="#" onclick="add_to_the_left(this)">《云计算基础架构》</a></li>-->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="cat_sublist">
+                    <!-- 浮层左边列表 -->
+                    <div class="fore1">
+                        <div class="fore_list">
+                            <input type="text" autocomplete="on" onkeydown="keyup_submit(event)">
+                            <button class="btn btn-primary" type="button"  onclick="search_criteria_CommonAPISearch(this)">SEARCH
+                            </button>
+                            <hr>
+                            <ul class="clearfix">
+                                <!--<li><a href="#" onclick="add_to_the_left(this)">《云计算基础架构》</a></li>-->
+                                <!--<li><a href="#" onclick="add_to_the_left(this)">《云平台》</a></li>-->
+                                <!--<li><a href="#" onclick="add_to_the_left(this)">《大数据》</a></li>-->
+                                <!--<li><a href="#" onclick="add_to_the_left(this)">《虚拟化技术》</a></li>-->
+                                <!--<li><a href="#" onclick="add_to_the_left(this)">《云计算基础架构》</a></li>-->
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="cat_sublist">
+                    <!-- 浮层左边列表 -->
+                    <div class="fore1">
+                        <div class="fore_list">
+                            <button class="btn btn-primary" type="button"  onclick="search_criteria_project(this)">SEARCH
+                            </button>
+                            <hr>
+                            <ul class="clearfix">
+                                <!--<li><a href="#" onclick="add_to_the_left(this)">《云计算基础架构》</a></li>-->
+                                <!--<li><a href="#" onclick="add_to_the_left(this)">《云平台》</a></li>-->
+                                <!--<li><a href="#" onclick="add_to_the_left(this)">《大数据》</a></li>-->
+                                <!--<li><a href="#" onclick="add_to_the_left(this)">《虚拟化技术》</a></li>-->
+                                <!--<li><a href="#" onclick="add_to_the_left(this)">《云计算基础架构》</a></li>-->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="cat_sublist">
+                    <!-- 浮层左边列表 -->
+                    <div class="fore1">
+                        <div class="fore_list">
+                            <input type="text" autocomplete="on" onkeydown="keyup_submit(event)">
+                            <button class="btn btn-primary" type="button"  onclick="search_criteria_ConceptSearch(this)">SEARCH
+                            </button>
+                            <hr>
+                            <ul class="clearfix">
+                                <!--<li><a href="#" onclick="add_to_the_left(this)">《云计算基础架构》</a></li>-->
+                                <!--<li><a href="#" onclick="add_to_the_left(this)">《云平台》</a></li>-->
+                                <!--<li><a href="#" onclick="add_to_the_left(this)">《大数据》</a></li>-->
+                                <!--<li><a href="#" onclick="add_to_the_left(this)">《虚拟化技术》</a></li>-->
+                                <!--<li><a href="#" onclick="add_to_the_left(this)">《云计算基础架构》</a></li>-->
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="right_page"  class="showGroup">
+    <!--<div id="right_page"  class="showGroup" style="display: none">-->
+        <h2>How To Use this Web!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</h2>
+        <div id="Graph">
+            <div id="labelProperty">
+                <div id="labelList">
+                </div>
+            </div>
+            <div id="GraphContainer">
+            </div>
+        </div>
+        <div id="searchresult">
+        </div>
     </div>
 </div>
 
@@ -238,7 +518,13 @@
 <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="css/stylesheet.css">
 <link rel="stylesheet" type="text/css" href="css/neo4jd3.css">
+
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/bootstrap-3.3.4.css">
+<script src="js/jquery-1.10.2.js"></script>
+<script src="js/index.js"></script>
 <!-- <link rel="stylesheet" type="text/css" href="css/fonts/dejavu.css"> -->
+
 <script src="js/generateRandomColor.js"></script>
 <script src="js/jquery-3.3.1.min.js"></script>
 <script src="js/jquery.tmpl.js"></script>
