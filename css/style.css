@@ -180,6 +180,10 @@ a, li {
 }
 #show_page{
 	height:inherit !important;
+    overflow:hidden;
+}
+#right_page{
+    overflow:auto;
 }
 .cat_wrap .cat_title {
 	width: 297px;
