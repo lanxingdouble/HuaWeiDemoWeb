@@ -14,7 +14,7 @@ function mouseon() {
         $(this).addClass("active").siblings().removeClass("active");
         clearTimeout(thisTime);
         var thisUB = $('.cat_wrap .cat_list .float').index($(this));
-        if ($.trim($('.cat_subcont .cat_sublist').eq(thisUB).html()) != "") {
+        if ($.trim($('.cat_subcont .cat_sublist').eq(thisUB).html()).length>0) {
             $('.cat_subcont').addClass('active');
             $('.cat_sublist').hide();
             $('.cat_sublist').eq(thisUB).show();
@@ -47,32 +47,6 @@ function add_to_the_left(item) {
     // console.log('id2:',$('.cat_list .float').eq(thisUB).children().eq(0).children().eq(1).attr("id"));
 }
 
-function navigation_bar_style_change(item, index) {
-    // $("#nav .w li").css("background","#00a1ea");
-    // $("#nav .w li").css("color","#ffffff");
-    // $(item).css("background","#fff000");
-    // $(item).css("color","#00a1ea");
-    $("#nav .w li").removeClass('active');
-    $(item).addClass('active');
-    $('.cat_wrap .cat_list').html("");
-    d = [{"name": "ewqf"}];
-    if (index == 0) {
-        $("#api_concept_bar_script").tmpl(d).appendTo('.cat_wrap .cat_list');
-        $('.cat_subcont').html("");
-        $("#api_concept_cat_subcont_bar_script").tmpl(d).appendTo('.cat_subcont');
-        mouseon();
-    } else if (index == 1) {
-        $("#issue_bar_script").tmpl(d).appendTo('.cat_wrap .cat_list');
-        $('.cat_subcont').html("");
-        $("#issue_cat_subcont_bar_script").tmpl(d).appendTo('.cat_subcont');
-        mouseon();
-    } else {
-        $("#developer_bar_script").tmpl(d).appendTo('.cat_wrap .cat_list');
-        mouseon();
-    }
-}
-
-
 
 function search_criteria_clone(item) {
     var name = $(item).prev("input").val();
@@ -92,6 +66,7 @@ function search_criteria_clone(item) {
                 console.log(xhr);
             },
             success: function (d) {
+                console.log("clone_searchP:",d);
                 if (d === "fail") {
                     return
                 }
@@ -152,6 +127,7 @@ function search_criteria_CommonAPISearch(item) {
                 console.log(xhr);
             },
             success: function (d) {
+                console.log("common_api_search:",d);
                 if (d === "fail") {
                     return
                 }
@@ -182,6 +158,7 @@ function search_criteria_ConceptSearch(item) {
                 console.log(xhr);
             },
             success: function (d) {
+                console.log("concept_search:",d);
                 if (d === "fail") {
                     return
                 }
@@ -210,6 +187,7 @@ function search_criteria_project(item) {
             if (d === "fail") {
                 return
             }
+            console.log("project_search:",d);
             $(item).parent().children("ul").html("");
             for (var i = 0; i < d.length; i++) {
                 $(item).parent().children("ul").append("<li><a href=\"#\" onclick=\"add_to_the_left(this)\" id="+d[i].kg_id+">"+d[i].project_name+"</a></li>");

@@ -11,6 +11,7 @@ var nodesAndRelations = [];
 var relationList = [];
 var labels_set = [];
 var color_index = 0;
+var search_type=0;
 // var id1;
 // var id2;
 // var id3;
@@ -107,27 +108,16 @@ function get_expand_nodes(kg_id) {
             $.each(d.nodes, function (i, val) {
                 labels.push(d.nodes[i]["labels"][0]);
             });
-            //console.log("labels:", labels);
             labels_set = new Set(labels);
-            //console.log("labels_set", labels_set);
             for (var value of labels_set) {
                 var color_label = {};
                 color_index = all_labels_color.indexOf(value);
-                //console.log("color index : ",color_index);
                 color_label["color"] = generateRandomColor(color_index);
                 color_label["name"] = value;
-                //console.log("color_label", color_label);
-                //console.log(labelProperty);
-                //console.log(labelProperty.push("@@@@@@@@@@@@@@2"));
                 labelProperty.push(color_label);
-                // color_index += 1;
             }
-            //console.log("labelProperty:", labelProperty);
             neo4jd3.cleanGraph();
             $.each(d.nodes, function (i, val) {
-                // if(d.nodes[i]["labels"][0]=="API Method") {
-                //     d.nodes[i]["name"] = get_simple_name(d.nodes[i]["name"]);
-                // }
                 d.nodes[i]["x"] = $("#GraphContainer").width() / 2;
                 d.nodes[i]["y"] = $("#GraphContainer").height() / 2;
                 getLabelSet(val.labels);
@@ -146,7 +136,6 @@ function get_expand_nodes(kg_id) {
                 new_relation["properties"] = {};
                 new_relations.push(new_relation);
             }
-            //console.log("第一次加载new_relations:",new_relations);
             let D3Data = {
                 "nodes": new_nodes,
                 "relationships": new_relations
@@ -185,7 +174,7 @@ function onNodeDoubleClick(d) {
             }
             var labels = []
             $.each(d.nodes, function (i, val) {
-                if (labels_set.has(d.nodes[i]["labels"][0]) == false) {
+                if (!labels_set.has(d.nodes[i]["labels"][0])) {
                     labels_set.add(d.nodes[i]["labels"][0]);
                     var color_label = {};
                     color_index = all_labels_color.indexOf(d.nodes[i]["labels"][0]);
@@ -232,7 +221,7 @@ function onNodeDoubleClick(d) {
                         }
                     }
                     for (var j = 0; j < new_nodes.length; j++) {
-                        if (new_nodes[j]["id"] == new_relations[i]["target"]) {
+                        if (new_nodes[j]["id"]==new_relations[i]["target"]) {
                             new_relations[i]["target"] = new_nodes[j];
                             break;
                         }
@@ -283,9 +272,6 @@ function hide_flow_panel() {
 }
 
 function click_for_result() {
-    console.log("*********************");
-    $("#right_page h2").html("click click click click ********************* *********************");
-
     labelProperty = [];
     labelList = [];
     labelStatusList = [];
@@ -295,7 +281,7 @@ function click_for_result() {
     labels_set = [];
     $("#labelList").html("");
     $("#searchresult").html("");
-    //$(".showGroup").css('display', 'none');
+    $(".showGroup").css('display', 'none');
     $("#searchresult").css('display', 'none');
     $("#Graph").css('display', 'none');
     var query = {
@@ -306,36 +292,135 @@ function click_for_result() {
         "from_project": parseInt($(".cat_header .cat_list").children(".float").children(".clearfix").eq(3).children("li").eq(1).attr("id")),
         "concept": parseInt($(".cat_header .cat_list").children(".float").children(".clearfix").eq(4).children("li").eq(1).attr("id"))
     }
-
+   // console.log("@@@@@@@@@@@@@@@",isNaN(query["clone_from"]));
+    if(isNaN(query["clone_from"])){
+        console.log("@@@@@@@@@@@@@@@");
+        query["clone_from"]=-1;
+    }
+    if(isNaN(query["related_developer"])){
+        query["related_developer"]=-1;
+    }
+    if(isNaN(query["call_same_common_api"])){
+        query["call_same_common_api"]=-1;
+    }
+    if(isNaN(query["from_project"])){
+        query["from_project"]=-1;
+    }
+    if(isNaN(query["concept"])){
+        query["concept"]=-1;
+    }
     // console.log( "clone_from", $(".cat_header .cat_list").children(".float").eq(0).children(".clearfix"));
     console.log("query: ",query);
     //判断搜索方式
-    $.ajax({
-        async: true,
-        url: "http://bigcode.fudan.edu.cn/dysd3/MethodSearch/",
-        type: "post",
-        contentType: "application/json; charset=utf-8",
-        data: JSON.stringify({"query": query}),
-        error: function (xhr, status, errorThrown) {
-            console.log("Error " + errorThrown);
-            console.log("Status: " + status);
-            console.log(xhr);
-            alert("error,can't find result");
-        },
-        success: function (d) {
-            if (d.length > 0) {
-                get_expand_nodes(d[0].kg_id);
-                console.log("api concept:" + d);
-                $(".showGroup").show();
-                $("#searchresult").show();
-                //$("#Graph").show();
-                $("#method_search_script").tmpl(d).appendTo("#searchresult");
-            } else {
-                alert("can't find result");
+    if(search_type==0) {
+        $.ajax({
+            async: true,
+            url: "http://bigcode.fudan.edu.cn/dysd3/MethodSearch/",
+            type: "post",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({"query": query}),
+            error: function (xhr, status, errorThrown) {
+                console.log("Error " + errorThrown);
+                console.log("Status: " + status);
+                console.log(xhr);
+                alert("error,can't find result");
+            },
+            success: function (d) {
+                if (d.length > 0) {
+                    get_expand_nodes(d[0].kg_id);
+                    console.log("api concept:" + d);
+                    $(".showGroup").show();
+                    $("#searchresult").show();
+                    $("#Graph").show();
+                    $("#method_search_script").tmpl(d).appendTo("#searchresult");
+                } else {
+                    alert("can't find result");
+                }
             }
-        }
-    });
+        });
+    }else if(search_type==1){
+        $.ajax({
+            async: true,
+            url: "http://bigcode.fudan.edu.cn/dysd3/IssueSearch/",
+            type: "post",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({"query": query}),
+            error: function (xhr, status, errorThrown) {
+                console.log("Error " + errorThrown);
+                console.log("Status: " + status);
+                console.log(xhr);
+                alert("error,can't find result");
+            },
+            success: function (d) {
+                if (d.length > 0) {
+                    get_expand_nodes(d[0].kg_id);
+                    console.log("api concept:" + d);
+                    $(".showGroup").show();
+                    $("#searchresult").show();
+                    //$("#Graph").show();
+                    $("#method_search_script").tmpl(d).appendTo("#searchresult");
+                } else {
+                    alert("can't find result");
+                }
+            }
+        });
+    }else{
+        $.ajax({
+            async: true,
+            url: "http://bigcode.fudan.edu.cn/dysd3/MethodSearch/",
+            type: "post",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({"query": query}),
+            error: function (xhr, status, errorThrown) {
+                console.log("Error " + errorThrown);
+                console.log("Status: " + status);
+                console.log(xhr);
+                alert("error,can't find result");
+            },
+            success: function (d) {
+                if (d.length > 0) {
+                    get_expand_nodes(d[0].kg_id);
+                    console.log("api concept:" + d);
+                    $(".showGroup").show();
+                    $("#searchresult").show();
+                    //$("#Graph").show();
+                    $("#method_search_script").tmpl(d).appendTo("#searchresult");
+                } else {
+                    alert("can't find result");
+                }
+            }
+        });
+    }
 }
+
+
+
+function navigation_bar_style_change(item, index) {
+    // $("#nav .w li").css("background","#00a1ea");
+    // $("#nav .w li").css("color","#ffffff");
+    // $(item).css("background","#fff000");
+    // $(item).css("color","#00a1ea");
+    $("#nav .w li").removeClass('active');
+    $(item).addClass('active');
+    $('.cat_wrap .cat_list').html("");
+    d = [{"name": "ewqf"}];
+    search_type=index;
+    if (index == 0) {
+        $("#api_concept_bar_script").tmpl(d).appendTo('.cat_wrap .cat_list');
+        $('.cat_subcont').html("");
+        $("#api_concept_cat_subcont_bar_script").tmpl(d).appendTo('.cat_subcont');
+        mouseon();
+    } else if (index == 1) {
+        $("#issue_bar_script").tmpl(d).appendTo('.cat_wrap .cat_list');
+        $('.cat_subcont').html("");
+        $("#issue_cat_subcont_bar_script").tmpl(d).appendTo('.cat_subcont');
+        mouseon();
+    } else {
+        $("#developer_bar_script").tmpl(d).appendTo('.cat_wrap .cat_list');
+        mouseon();
+    }
+}
+
 
 //搜索按钮事件
 function jumpClick() {

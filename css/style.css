@@ -94,41 +94,6 @@ h1 a {
 	-o-transform: rotate(180deg);
 	transform: rotate(180deg);
 }
-
-/**
- * Submenu
- -----------------------------*/
- .submenu {
- 	display: none;
- 	background: #ffffff;
- 	font-size: 14px;
- }
-
- .submenu li {
- 	border-bottom: 1px solid #a94442;
- }
-
- .submenu a {
- 	display: block;
- 	text-decoration: none;
- 	color: #337ab7;
- 	padding: 2px;
- 	padding-left: 0px;
- 	-webkit-transition: all 0.25s ease;
- 	-o-transition: all 0.25s ease;
- 	transition: all 0.25s ease;
- }
-
- .submenu a:hover {
- 	background: #b63b4d;
- 	color: #FFF;
- }
-.submenu a:visited {
-	color: rgb(60, 63, 65);
-}
-
-
-
 * {
 	margin: 0;
 	padding: 0;
