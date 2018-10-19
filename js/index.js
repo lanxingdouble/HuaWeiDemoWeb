@@ -195,3 +195,34 @@ function search_criteria_project(item) {
         }
     });
 }
+
+function search_criteria_Related_Issue(item) {
+    var name = $(item).prev("input").val();
+    console.log("44444444", name);
+    if (name.length == 0) {
+        alert("empty input!")
+    } else {
+        $.ajax({
+            async: true,
+            url: "http://bigcode.fudan.edu.cn/dysd3/ConceptSearch/",
+            type: "post",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({"query": {"name": name}}),
+            error: function (xhr, status, errorThrown) {
+                console.log("Error " + errorThrown);
+                console.log("Status: " + status);
+                console.log(xhr);
+            },
+            success: function (d) {
+                console.log("concept_search:",d);
+                if (d === "fail") {
+                    return
+                }
+                $(item).parent().children("ul").html("");
+                for (var i = 0; i < d.length; i++) {
+                    $(item).parent().children("ul").append("<li><a href=\"#\" onclick=\"add_to_the_left(this)\" id="+d[i].kg_id+">"+d[i].name+"</a></li>");
+                }
+            }
+        });
+    }
+}

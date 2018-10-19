@@ -854,6 +854,7 @@ function Neo4jD3(_selector, _options) {
 
     function tickRelationshipsTexts() {
         relationshipText.attr('transform', function (d) {
+            // console.log(d);
             let angle = rotation(d.source, d.target),
                 angle2 = (rotation(d.source, d.target) + 360) % 360,
                 mirror = angle2 > 90 && angle2 < 270,
@@ -865,6 +866,7 @@ function Neo4jD3(_selector, _options) {
                     y: (d.target.y - d.source.y) * 0.5 + n.y * nWeight
                 },
                 rotatedPoint = rotatePoint(center, point, angle);
+                // console.log("tioahi:",point,angle);
                 // textBoundingBox = text.node().getBBox(),
                 // textPadding = 5,
                 // u = unitaryVector(d.source, d.target),
@@ -910,7 +912,7 @@ function Neo4jD3(_selector, _options) {
                 //     x: d.target.x - d.source.x - textMargin.x,
                 //     y: d.target.y - d.source.y - textMargin.y
                 // }, angle);
-
+            // console.log(rotatedPoint.x + ', ' + rotatedPoint.y);
             return 'translate(' + rotatedPoint.x + ', ' + rotatedPoint.y + ') rotate(' + (mirror ? 180 : 0) + ')';
         });
     }
