@@ -74,7 +74,7 @@ function search_criteria_clone(item) {
                 if(d.length>0) {
                     $(item).parent().children("ul").html("");
                     for (var i = 0; i < d.length; i++) {
-                        $(item).parent().children("ul").append("<li><a href=\"#\" onclick=\"add_to_the_left(this)\" id=" + d[i].kg_id + ">" + d[i].name + "</a></li>");
+                        $(item).parent().children("ul").append("<li><a href=\"#\" onclick=\"add_to_the_left(this)\" id=" + d[i].id + ">" + d[i].name + "</a></li>");
                     }
                 }else{
                     alert("can't find result");

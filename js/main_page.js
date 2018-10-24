@@ -424,6 +424,10 @@ function click_for_result() {
             "report_issue": parseInt($(".cat_header .cat_list").children(".float").children(".clearfix").eq(2).children("li").eq(1).attr("id")),
             "joint_project":parseInt($(".cat_header .cat_list").children(".float").children(".clearfix").eq(3).children("li").eq(1).attr("id")),
         }
+        if(isNaN(query["concept"])){
+            query["concept"]=-1;
+            sum=sum+1;
+        }
         if(isNaN(query["solve_issue"])){
             query["solve_issue"]=-1;
             sum=sum+1;
@@ -437,7 +441,7 @@ function click_for_result() {
             sum=sum+1;
         }
         console.log("query: ",query);
-        if(sum<3 || query["name"].length>0) {
+        if(sum<4 || query["name"].length>0) {
             $.ajax({
                 async: true,
                 url: "http://bigcode.fudan.edu.cn/dysd3/ReporterSearch/",
