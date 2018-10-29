@@ -1,9 +1,10 @@
+let neo4jd3;
 let startData = {
     "nodes": [],
     "relationships": []
 };
 let labelProperty = [];
-let all_labels_color = ["Software Concept", "Descriptive Knowledge", "API Concept", "API Package", "API Class", "API Interface", "API Field", "API Method", "API Parameter", "API Return Value", "Exception"];
+let all_labels_color = ["Software Concept", "Descriptive Knowledge", "API Concept", "API Package", "API Class", "API Interface", "API Field", "API Method", "API Parameter", "API Return Value", "Exception", "API Reporter","API Commit","API Issue","Clone Class","Project"];
 var labelList = [];
 var labelStatusList = [];
 var relationStatusList = [];
@@ -11,13 +12,10 @@ var nodesAndRelations = [];
 var relationList = [];
 var labels_set = [];
 var color_index = 0;
-var search_type=0;
-// var id1;
-// var id2;
-// var id3;
-// var id4;
-// var id5;
-let neo4jd3 = new Neo4jD3('#GraphContainer', {
+var searchlist = ["which method clone_from={android_ads:com.google.ads.rewardedvideoexample.MainActivity.onCreate} concept={dash board}",
+    "which issue has_solve={0} concept={drop-down refresh}",
+    "which reporter commit most concept={dash board}"]
+neo4jd3 = new Neo4jD3('#GraphContainer', {
     D3Data: startData,
     zoomFit: false,
     infoPanel: true,
@@ -64,7 +62,7 @@ let neo4jd3 = new Neo4jD3('#GraphContainer', {
         'User': 'img/twemoji/1f600.svg'
     },
 });
-
+//let all_labels_color=[];
 //获取当前节点的label,加至label_list
 function getLabelSet(labels) {
     if (labels) {
@@ -86,8 +84,9 @@ function getLabelSet(labels) {
     }
 
 }
-
-
+// $().ready(function(){
+//     get_all_labels();
+// });
 //获取节点
 function get_expand_nodes(kg_id) {
     $.ajax({
@@ -114,7 +113,7 @@ function get_expand_nodes(kg_id) {
             //console.log("labels_set", labels_set);
             for (var value of labels_set) {
                 var color_label = {};
-                color_index=all_labels_color.indexOf(value);
+                color_index = all_labels_color.indexOf(value);
                 //console.log("color index : ",color_index);
                 color_label["color"] = generateRandomColor(color_index);
                 color_label["name"] = value;
@@ -146,9 +145,7 @@ function get_expand_nodes(kg_id) {
                 new_relation["endNode"] = relation.end_id;
                 new_relation["type"] = relation.name;
                 new_relation["properties"] = {};
-                if(relation.start_id!= relation.end_id) {
-                    new_relations.push(new_relation);
-                }
+                new_relations.push(new_relation);
             }
             //console.log("第一次加载new_relations:",new_relations);
             let D3Data = {
@@ -158,7 +155,7 @@ function get_expand_nodes(kg_id) {
             neo4jd3.updateWithD3Data(D3Data);
             neo4jd3.nodesColor();
             nodesAndRelations.push(D3Data);
-            console.log("第一次加载nodeandrelation :",nodesAndRelations);
+            console.log("第一次加载nodeandrelation :", nodesAndRelations);
             //console.log("加载时labelstuteliae:",labelStatusList);
             console.log(d);
         }
@@ -189,7 +186,7 @@ function onNodeDoubleClick(d) {
             }
             var labels = []
             $.each(d.nodes, function (i, val) {
-                if (!labels_set.has(d.nodes[i]["labels"][0])) {
+                if (labels_set.has(d.nodes[i]["labels"][0]) == false) {
                     labels_set.add(d.nodes[i]["labels"][0]);
                     var color_label = {};
                     color_index = all_labels_color.indexOf(d.nodes[i]["labels"][0]);
@@ -221,9 +218,7 @@ function onNodeDoubleClick(d) {
                 new_relation["endNode"] = relation.end_id;
                 new_relation["type"] = relation.name;
                 new_relation["properties"] = {};
-                if(relation.start_id!= relation.end_id) {
-                    new_relations.push(new_relation);
-                }
+                new_relations.push(new_relation);
             }
             //console.log("扩展new_relations:",new_relations);
             //修复双击扩展后不能选择label的bug，因为有部分["source"]["target"],不是节点
@@ -238,7 +233,7 @@ function onNodeDoubleClick(d) {
                         }
                     }
                     for (var j = 0; j < new_nodes.length; j++) {
-                        if (new_nodes[j]["id"]==new_relations[i]["target"]) {
+                        if (new_nodes[j]["id"] == new_relations[i]["target"]) {
                             new_relations[i]["target"] = new_nodes[j];
                             break;
                         }
@@ -288,224 +283,172 @@ function hide_flow_panel() {
     }
 }
 
-function click_for_result() {
-    labelProperty = [];
-    labelList = [];
-    labelStatusList = [];
-    relationStatusList = [];
-    nodesAndRelations = [];
-    relationList = [];
-    labels_set = [];
-    $("#labelList").html("");
-    $("#searchresult").html("");
-    $(".showGroup").css('display', 'none');
-    $("#searchresult").css('display', 'none');
-    $("#Graph").css('display', 'none');
-    //判断搜索方式
-    if(search_type==0) {
-        var sum=0;
-        var query = {
-            "name": $(".cat_header input").val(),
-            "clone_from": parseInt($(".cat_header .cat_list").children(".float").children(".clearfix").eq(0).children("li").eq(1).attr("id")),
-            "related_developer": parseInt($(".cat_header .cat_list").children(".float").children(".clearfix").eq(1).children("li").eq(1).attr("id")),
-            "call_same_common_api": parseInt($(".cat_header .cat_list").children(".float").children(".clearfix").eq(2).children("li").eq(1).attr("id")),
-            "from_project": parseInt($(".cat_header .cat_list").children(".float").children(".clearfix").eq(3).children("li").eq(1).attr("id")),
-            "concept": parseInt($(".cat_header .cat_list").children(".float").children(".clearfix").eq(4).children("li").eq(1).attr("id"))
+function get_all_labels(){
+    $.ajax({
+        async: true,
+        url: "http://bigcode.fudan.edu.cn/dysd3/GraphParam/",
+        type: "post",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({"query":""}),
+        error: function (xhr, status, errorThrown) {
+            console.log("Error " + errorThrown);
+            console.log("Status: " + status);
+            console.log(xhr);
+            // alert("can't find result");
+        },
+        success: function (d) {
+            if (d.length > 0) {
+                all_labels_color = d.labels;
+                console.log(d);
+            }
         }
-        // console.log("@@@@@@@@@@@@@@@",isNaN(query["clone_from"]));
-        if(isNaN(query["clone_from"])){
-            console.log("@@@@@@@@@@@@@@@");
-            query["clone_from"]=-1;
-            sum=sum+1;
-        }
-        if(isNaN(query["related_developer"])){
-            query["related_developer"]=-1;
-            sum=sum+1;
-        }
-        if(isNaN(query["call_same_common_api"])){
-            query["call_same_common_api"]=-1;
-            sum=sum+1;
-        }
-        if(isNaN(query["from_project"])){
-            query["from_project"]=-1;
-            sum=sum+1;
-        }
-        if(isNaN(query["concept"])){
-            query["concept"]=-1;
-            sum=sum+1;
-        }
-        console.log("query: ",query);
-        if(sum<5 || query["name"].length>0) {
-            $.ajax({
-                async: true,
-                url: "http://bigcode.fudan.edu.cn/dysd3/MethodSearch/",
-                type: "post",
-                contentType: "application/json; charset=utf-8",
-                data: JSON.stringify({"query": query}),
-                error: function (xhr, status, errorThrown) {
-                    console.log("Error " + errorThrown);
-                    console.log("Status: " + status);
-                    console.log(xhr);
-                    alert("error,can't find result");
-                },
-                success: function (d) {
-                    if (d.length > 0) {
-                        get_expand_nodes(d[0].kg_id);
-                        console.log("api concept:" + d);
-                        $(".showGroup").show();
-                        $("#searchresult").show();
-                        $("#Graph").show();
-                        $("#method_search_script").tmpl(d).appendTo("#searchresult");
-                    } else {
-                        alert("can't find result");
-                    }
-                }
-            });
-        }else{
-            alert("empty input!");
-        }
-    }else if(search_type==1){
-        var sum=0;
-        var query = {
-            "name": $(".cat_header input").val(),
-            "concept": parseInt($(".cat_header .cat_list").children(".float").children(".clearfix").eq(0).children("li").eq(1).attr("id")),
-            "solver": parseInt($(".cat_header .cat_list").children(".float").children(".clearfix").eq(1).children("li").eq(1).attr("id")),
-            "reporter": parseInt($(".cat_header .cat_list").children(".float").children(".clearfix").eq(2).children("li").eq(1).attr("id")),
-            "has_solve":2
-        }
-        if(isNaN(query["concept"])){
-            query["concept"]=-1;
-            sum=sum+1;
-        }
-        if(isNaN(query["solver"])){
-            query["solver"]=-1;
-            sum=sum+1;
-        }
-        if(isNaN(query["reporter"])){
-            query["reporter"]=-1;
-            sum=sum+1;
-        }
-        console.log("query: ",query);
-        if(sum<3 || query["name"].length>0) {
-            $.ajax({
-                async: true,
-                url: "http://bigcode.fudan.edu.cn/dysd3/IssueSearch/",
-                type: "post",
-                contentType: "application/json; charset=utf-8",
-                data: JSON.stringify({"query": query}),
-                error: function (xhr, status, errorThrown) {
-                    console.log("Error " + errorThrown);
-                    console.log("Status: " + status);
-                    console.log(xhr);
-                    alert("error,can't find result");
-                },
-                success: function (d) {
-                    if (d.length > 0) {
-                        get_expand_nodes(d[0].kg_id);
-                        console.log("api concept:" + d);
-                        $(".showGroup").show();
-                        $("#searchresult").show();
-                        $("#Graph").show();
-                        $("#issue_search_script").tmpl(d).appendTo("#searchresult");
-                    } else {
-                        alert("can't find result");
-                    }
-                }
-            });
-        }else{
-            alert("empty input!");
-        }
-    }else{
-        var sum=0;
-        var query = {
-            "name": $(".cat_header input").val(),
-            "concept": parseInt($(".cat_header .cat_list").children(".float").children(".clearfix").eq(0).children("li").eq(1).attr("id")),
-            "solve_issue": parseInt($(".cat_header .cat_list").children(".float").children(".clearfix").eq(1).children("li").eq(1).attr("id")),
-            "report_issue": parseInt($(".cat_header .cat_list").children(".float").children(".clearfix").eq(2).children("li").eq(1).attr("id")),
-            "joint_project":parseInt($(".cat_header .cat_list").children(".float").children(".clearfix").eq(3).children("li").eq(1).attr("id")),
-        }
-        if(isNaN(query["concept"])){
-            query["concept"]=-1;
-            sum=sum+1;
-        }
-        if(isNaN(query["solve_issue"])){
-            query["solve_issue"]=-1;
-            sum=sum+1;
-        }
-        if(isNaN(query["report_issue"])){
-            query["report_issue"]=-1;
-            sum=sum+1;
-        }
-        if(isNaN(query["joint_project"])){
-            query["joint_project"]=-1;
-            sum=sum+1;
-        }
-        console.log("query: ",query);
-        if(sum<4 || query["name"].length>0) {
-            $.ajax({
-                async: true,
-                url: "http://bigcode.fudan.edu.cn/dysd3/ReporterSearch/",
-                type: "post",
-                contentType: "application/json; charset=utf-8",
-                data: JSON.stringify({"query": query}),
-                error: function (xhr, status, errorThrown) {
-                    console.log("Error " + errorThrown);
-                    console.log("Status: " + status);
-                    console.log(xhr);
-                    alert("error,can't find result");
-                },
-                success: function (d) {
-                    if (d.length > 0) {
-                        get_expand_nodes(d[0].kg_id);
-                        console.log("api concept:" + d);
-                        $(".showGroup").show();
-                        $("#searchresult").show();
-                        $("#Graph").show();
-                        $("#developer_search_script").tmpl(d).appendTo("#searchresult");
-                    } else {
-                        alert("can't find result");
-                    }
-                }
-            });
-        }else{
-            alert("empty input!");
-        }
-    }
+    });
 }
-
-
-
-function navigation_bar_style_change(item, index) {
-    // $("#nav .w li").css("background","#00a1ea");
-    // $("#nav .w li").css("color","#ffffff");
-    // $(item).css("background","#fff000");
-    // $(item).css("color","#00a1ea");
-    $("#nav .w li").removeClass('active');
-    $(item).addClass('active');
-    $('.cat_wrap .cat_list').html("");
-    d = [{"name": "ewqf"}];
-    $("#name_btn").val("");
-    search_type=index;
-    if (index == 0) {
-        $("#api_concept_bar_script").tmpl(d).appendTo('.cat_wrap .cat_list');
-        $('.cat_subcont').html("");
-        $("#api_concept_cat_subcont_bar_script").tmpl(d).appendTo('.cat_subcont');
-        mouseon();
-    } else if (index == 1) {
-        $("#issue_bar_script").tmpl(d).appendTo('.cat_wrap .cat_list');
-        $('.cat_subcont').html("");
-        $("#issue_cat_subcont_bar_script").tmpl(d).appendTo('.cat_subcont');
-        mouseon();
-    } else {
-        $("#developer_bar_script").tmpl(d).appendTo('.cat_wrap .cat_list');
-        $('.cat_subcont').html("");
-        $("#developer_cat_subcont_bar_script").tmpl(d).appendTo('.cat_subcont');
-        mouseon();
-    }
-}
-
-
 //搜索按钮事件
+// function jumpClick() {
+//     labelProperty=[];
+//     labelList=[];
+//     labelStatusList=[];
+//     relationStatusList=[];
+//     nodesAndRelations=[];
+//     relationList=[];
+//     labels_set = [];
+//     $("#labelList").html("");
+//     $("#searchresult").html("");
+//     $(".showGroup").css('display', 'none');
+//     $("#searchresult").css('display', 'none');
+//     $("#Graph").css('display', 'none');
+//     var search_type = parseInt($('#search_type option:selected').val());
+//     var textvalue = $("input[class='form-control']").val();
+//     if (textvalue.length>0) {
+//         //判断搜索方式
+//         if (search_type==1) {
+//             $.ajax({
+//                 async: true,
+//                 url: "http://bigcode.fudan.edu.cn/dysd3/MethodSearch/",
+//                 type: "post",
+//                 contentType: "application/json; charset=utf-8",
+//                 data: JSON.stringify({"query": textvalue}),
+//                 error: function (xhr, status, errorThrown) {
+//                     console.log("Error " + errorThrown);
+//                     console.log("Status: " + status);
+//                     console.log(xhr);
+//                     alert("can't find result");
+//                 },
+//                 success: function (d) {
+//                     if (d.length > 0) {
+//                         get_expand_nodes(d[0].kg_id);
+//                         console.log("api concept:"+d);
+//                         $(".showGroup").show();
+//                         $("#searchresult").show();
+//                         $("#Graph").show();
+//                         $("#method_search_script").tmpl(d).appendTo("#searchresult");
+//                     }else{
+//                         alert("can't find result");
+//                     }
+//                 }
+//             });
+//         }else if(search_type==2){
+//             $.ajax({
+//                 async: true,
+//                 url: "http://bigcode.fudan.edu.cn/dysd3/IssueQuery/",
+//                 type: "post",
+//                 contentType: "application/json; charset=utf-8",
+//                 data: JSON.stringify({"query": textvalue}),
+//                 error: function (xhr, status, errorThrown) {
+//                     console.log("Error " + errorThrown);
+//                     console.log("Status: " + status);
+//                     console.log(xhr);
+//                 },
+//                 success: function (d) {
+//                     if (d.length > 0) {
+//                         get_expand_nodes(d[0].kg_id);
+//                         console.log("issue:"+d);
+//                         $(".showGroup").show();
+//                         $("#searchresult").show();
+//                         $("#Graph").show();
+//                         $("#issue_search_script").tmpl(d).appendTo("#searchresult");
+//                     }else{
+//                         alert("can't find result");
+//                     }
+//                 }
+//             });
+//
+//         }else{
+//             $.ajax({
+//                 async: true,
+//                 url: "http://bigcode.fudan.edu.cn/dysd3/DeveloperQuery/",
+//                 type: "post",
+//                 contentType: "application/json; charset=utf-8",
+//                 data: JSON.stringify({"query": textvalue}),
+//                 error: function (xhr, status, errorThrown) {
+//                     console.log("Error " + errorThrown);
+//                     console.log("Status: " + status);
+//                     console.log(xhr);
+//                 },
+//                 success: function (d) {
+//                     if (d.length > 0) {
+//                         get_expand_nodes(d[0].kg_id);
+//                         console.log("developer:"+d);
+//                         $(".showGroup").show();
+//                         $("#searchresult").show();
+//                         $("#Graph").show();
+//                         $("#developer_search_script").tmpl(d).appendTo("#searchresult");
+//                     }else{
+//                         alert("can't find result");
+//                     }
+//                 }
+//             });
+//         }
+//     } else {
+//         $("#searchresult").html("");
+//         $(".showGroup").css('display', 'none');
+//         $("#searchresult").css('display', 'none');
+//         $("#Graph").css('display', 'none');
+//         alert("empty input");
+//     }
+// }
+function search(method, query) {
+    $.ajax({
+        async: true,
+        url: "http://bigcode.fudan.edu.cn/dysd3/" + method + "/",
+        type: "post",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({"query": query}),
+        error: function (xhr, status, errorThrown) {
+            console.log("Error " + errorThrown);
+            console.log("Status: " + status);
+            console.log(xhr);
+            // alert("can't find result");
+        },
+        success: function (d) {
+            if (d.length > 0) {
+                get_expand_nodes(d[0].kg_id);
+                console.log("api concept:" + d);
+                $(".showGroup").show();
+                $("#searchresult").show();
+                $("#Graph").show();
+                if(d[0].hasOwnProperty("method_name")){
+                    $("#method_search_script").tmpl(d).appendTo("#searchresult");
+                }else if (d[0].hasOwnProperty("issue_tittle")){
+                    $("#issue_search_script").tmpl(d).appendTo("#searchresult");
+                }else{
+                    $("#developer_search_script").tmpl(d).appendTo("#searchresult");
+                }
+                // if(method=="MethodSearch") {
+                //
+                // }else if(method=="IssueSearch"){
+                //
+                // }else{
+                //
+                // }
+            } else {
+                alert("can't find result!");
+            }
+        }
+    });
+}
+
 function jumpClick() {
     labelProperty = [];
     labelList = [];
@@ -519,94 +462,51 @@ function jumpClick() {
     $(".showGroup").css('display', 'none');
     $("#searchresult").css('display', 'none');
     $("#Graph").css('display', 'none');
-    var search_type = parseInt($('#search_type option:selected').val());
-    var textvalue = $("input[class='form-control']").val();
+    var textvalue = $("#list-name-for-select").val();
+    console.log(textvalue);
     if (textvalue.length > 0) {
         //判断搜索方式
-        if (search_type == 1) {
-            $.ajax({
-                async: true,
-                url: "http://bigcode.fudan.edu.cn/dysd3/MethodSearch/",
-                type: "post",
-                contentType: "application/json; charset=utf-8",
-                data: JSON.stringify({"query": textvalue}),
-                error: function (xhr, status, errorThrown) {
-                    console.log("Error " + errorThrown);
-                    console.log("Status: " + status);
-                    console.log(xhr);
-                    alert("can't find result");
-                },
-                success: function (d) {
-                    if (d.length > 0) {
-                        get_expand_nodes(d[0].kg_id);
-                        console.log("api concept:" + d);
-                        $(".showGroup").show();
-                        $("#searchresult").show();
-                        $("#Graph").show();
-                        $("#method_search_script").tmpl(d).appendTo("#searchresult");
-                    } else {
-                        alert("can't find result");
-                    }
-                }
-            });
-        } else if (search_type == 2) {
-            $.ajax({
-                async: true,
-                url: "http://bigcode.fudan.edu.cn/dysd3/IssueQuery/",
-                type: "post",
-                contentType: "application/json; charset=utf-8",
-                data: JSON.stringify({"query": textvalue}),
-                error: function (xhr, status, errorThrown) {
-                    console.log("Error " + errorThrown);
-                    console.log("Status: " + status);
-                    console.log(xhr);
-                },
-                success: function (d) {
-                    if (d.length > 0) {
-                        get_expand_nodes(d[0].kg_id);
-                        console.log("issue:" + d);
-                        $(".showGroup").show();
-                        $("#searchresult").show();
-                        $("#Graph").show();
-                        $("#issue_search_script").tmpl(d).appendTo("#searchresult");
-                    } else {
-                        alert("can't find result");
-                    }
-                }
-            });
+        if (textvalue == searchlist[0]) {
+            var method = "MethodSearch";
+            var query =
+                {
+                    "call_same_common_api": -1,
+                    "clone_from": 228270,
+                    "concept": 1315183,
+                    "from_project": -1,
+                    "name": "",
+                    "related_developer": -1
+                };
+            search(method, query);
+        } else if (textvalue == searchlist[1]) {
+            var method = "IssueSearch";
+            var query =
+                {
+                    "concept": 1315184,
+                    "has_solve": 2,
+                    "name": "",
+                    "reporter": -1,
+                    "solver": -1
+                };
+            search(method, query);
+        } else if (textvalue == searchlist[2]) {
+            var method = "ReporterSearch";
+            var query =
+                {
+                    "concept": 1315183,
+                    "joint_project": -1,
+                    "name": "",
+                    "report_issue": -1,
+                    "solve_issue": -1
 
+                };
+            search(method, query);
         } else {
-            $.ajax({
-                async: true,
-                url: "http://bigcode.fudan.edu.cn/dysd3/DeveloperQuery/",
-                type: "post",
-                contentType: "application/json; charset=utf-8",
-                data: JSON.stringify({"query": textvalue}),
-                error: function (xhr, status, errorThrown) {
-                    console.log("Error " + errorThrown);
-                    console.log("Status: " + status);
-                    console.log(xhr);
-                },
-                success: function (d) {
-                    if (d.length > 0) {
-                        get_expand_nodes(d[0].kg_id);
-                        console.log("developer:" + d);
-                        $(".showGroup").show();
-                        $("#searchresult").show();
-                        $("#Graph").show();
-                        $("#developer_search_script").tmpl(d).appendTo("#searchresult");
-                    } else {
-                        alert("can't find result");
-                    }
-                }
-            });
+            query=textvalue;
+            search("Search", query);
         }
-    } else {
-        $("#searchresult").html("");
-        $(".showGroup").css('display', 'none');
-        $("#searchresult").css('display', 'none');
-        $("#Graph").css('display', 'none');
-        alert("empty input");
+    }else{
+        alert("empty input!")
     }
 }
 
